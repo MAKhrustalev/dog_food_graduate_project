@@ -1,60 +1,60 @@
 header {
-    background: yellow;
-    padding: 12px 20px;
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
+  background: gold;
+  padding: 12px 20px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 header .search-block {
-    order: 1;
-    width: 100%;
-    display: flex;
-    justify-content: center;
+  order: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 footer {
-    padding: 12px 20px;
-    display: flex;
-    justify-content: space-between;
-    background-color: #222;
-    color: yellow;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  background-color: #222;
+  color: gold;
 }
 
 .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: bold;
-    font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  font-size: 1.2rem;
 }
 .logo img {
-    height: 30px;
+  height: 30px;
 }
 .footer__copy {
-    display: grid;
-    align-content: space-between;
+  display: grid;
+  align-content: space-between;
 }
 .footer__nav {
-    display: grid;
-    gap: 10px;
+  display: grid;
+  gap: 10px;
 }
 .footer__nav a:hover {
-    color: orange;
+  color: orange;
 }
 .header__menu,
-.header__menu>span {
-    font-size: 1.2rem;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.header__menu > span {
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
-.header__menu>span>* {
-    cursor: pointer;
+.header__menu > span > * {
+  cursor: pointer;
 }
 .header__menu svg:hover {
-    fill: orange;
+  fill: orange;
 }
 
 /* 
@@ -65,7 +65,7 @@ footer {
     } 
 */
 
-@media (min-width: 576px){
+@media (min-width: 576px) {
   header {
     flex-wrap: no-wrap;
   }
@@ -74,10 +74,3 @@ footer {
     width: auto;
   }
 }
-
-
-
-
-
-
-
