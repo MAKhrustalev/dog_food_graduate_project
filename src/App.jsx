@@ -12,6 +12,8 @@ import { Header, Footer } from "./components/General"; // index.jsx
 import Home from "./pages/Home";
 import Catalog from "./pages/Catalog";
 import OldPage from "./pages/Old";
+import Profile from "./pages/Profile";
+import Product from "./pages/Product";
 
 const App = () => {
   const [user, setUser] = useState(localStorage.getItem("user12"));
@@ -73,17 +75,48 @@ const App = () => {
         setSearchResult={setSearchResult}
         setModalOpen={setModalOpen}
       />
-      <Routes>
-        <Route
-          path="/"
-          element={<Home user={user} setActive={setModalOpen} />}
-        />
-        <Route path="/catalog" element={<Catalog goods={goods} />} />
-        <Route
-          path="/old"
-          element={<OldPage searchText={searchResult} goods={goods} />}
-        />
-      </Routes>
+      <main>
+        <Routes>
+          <Route
+            path="/"
+            element={<Home user={user} setActive={setModalOpen} />}
+          />
+          <Route
+            path="/catalog"
+            element={
+              <Catalog // передаем параметры в Каталог
+                goods={goods}
+                setBaseData={setBaseData}
+                userId={userId}
+              />
+            }
+          />
+          <Route
+            path="/old"
+            element={<OldPage searchText={searchResult} goods={goods} />}
+          />
+          <Route
+            path="/profile"
+            element={<Profile user={user} setUser={setUser} />} // то что принимаем и его значение
+          />
+          {/*
+          :id - параметризованный запрос, где то, что идет после : является различными данными, которые можно вызвать при помощи свойства id
+          {id: "...."}
+
+          шаблон: /product/:brand/:year/:id
+          /product/samsung/2019/12345
+          /product/samsung/2019/78923
+          /product/xaomi/2022/93838
+          /product/apple/2019/32483
+
+          шаблон: /product/year/:year
+          {year: "..."}
+          /product/year/2022
+          /product/year/2019
+          */}
+          <Route path="/products/:id" element={<Product />} />
+        </Routes>
+      </main>
       <Footer />
       <Modal
         isActive={modalOpen}

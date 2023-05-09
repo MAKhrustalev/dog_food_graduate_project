@@ -5,7 +5,7 @@ import {
   Cart4,
   PersonCircle,
   BuildingUp,
-  BuildingDown,
+  // BuildingDown, - кнопка Выйти больше не нужна
 } from "react-bootstrap-icons";
 
 import Search from "../Search";
@@ -28,10 +28,10 @@ const Header = ({
     // localStorage.setItem("user12", "Vasya");
     // upd("Vasya");
   };
-  const logout = () => {
-    localStorage.removeItem("user12");
-    upd(null);
-  };
+  // const logout = () => {
+  //   localStorage.removeItem("user12");
+  //   upd(null);
+  // }; - функция выхода больше не нужна в главном меню
   return (
     <header>
       <Logo />
@@ -51,14 +51,14 @@ const Header = ({
             <Link to="/">
               <Cart4 title="Корзина" />
             </Link>
-            <Link to="/">
+            <Link to="/profile">
               <PersonCircle title="Личный кабинет" />
             </Link>
           </>
         )}
         <span>
           {!user && <BuildingUp title="Войти" onClick={login} />}
-          {user && <BuildingDown title="Выйти" onClick={logout} />}
+          {/* {user && <BuildingDown title="Выйти" onClick={logout} />} */}
         </span>
       </nav>
     </header>

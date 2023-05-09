@@ -59,7 +59,7 @@ p {
 .top {
   background-color: gold;
   padding: 20px;
-  padding: 30px 20px 100px 200px;
+  padding: 30px 20px 125px 200px;
 }
 
 .top button {
@@ -74,4 +74,13 @@ p {
   box-sizing: border-box;
   font-size: 1rem;
   font-weight: bold;
+}
+.main {
+  background-color: red;
+  margin-left: 200px;
+  margin-right: 200px;
+  margin-top: -75px;
+}
+.bottom {
+  background-color: green;
 }

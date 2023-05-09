@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom"; // связь с линками
 import { Journals } from "react-bootstrap-icons"; // импорт иконки bootstrap
+import Ads from "../components/Ads/Ads";
+import { AdsMini1, AdsMini2 } from "../components/AsdMini/AdsMini";
 
 const Home = ({ user, setActive }) => {
   // Компонент домашней страницы - если есть user, то страница отрисовывается
@@ -31,7 +33,13 @@ const Home = ({ user, setActive }) => {
           </Link>
         )} */}
       </div>
-      <div className="main">Main</div>
+      <div className="main">
+        Main
+        <Ads />
+        <AdsMini1 />
+        <AdsMini2 />
+        <Ads />
+      </div>
       <div className="bottom">Bottom</div>
       {!user && (
         <>
@@ -44,5 +52,4 @@ const Home = ({ user, setActive }) => {
     </div>
   );
 };
-
 export default Home;
