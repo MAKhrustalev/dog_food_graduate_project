@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom"; // подключение элементов
+
 /* SPA - Single Page Application - Приложение с одной страницей */
 
 // import testData from "./assents/data.json"; убрали т.к данные берутся с сайта
@@ -79,7 +80,15 @@ const App = () => {
         <Routes>
           <Route
             path="/"
-            element={<Home user={user} setActive={setModalOpen} />}
+            element={
+              <Home
+                user={user}
+                setActive={setModalOpen}
+                goods={goods}
+                setBaseData={setBaseData}
+                userId={userId}
+              />
+            }
           />
           <Route
             path="/catalog"

@@ -12,8 +12,6 @@ span {
   margin-top: 10px;
 }
 .ad__mini__block {
-  /* background-color: darkgoldenrod; */
-  background-color: indianred;
   border: 1px solid;
   border-radius: 8px;
   height: 250px;
@@ -29,8 +27,8 @@ span {
   color: beige;
   margin: 30px 20px;
   /* margin-left: 50px;
-  margin-top: 50px;
-  margin-right: 10px; */
+    margin-top: 50px;
+    margin-right: 10px; */
 }
 
 .ad__mini__picture {
