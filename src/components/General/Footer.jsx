@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"; // связь с линками
 import Logo from "./Logo";
 const links = [
   { name: "Каталог", src: "/catalog" },
-  { name: "Избранное", src: "/" },
+  { name: "Избранное", src: "/favorites" },
   { name: "Корзина", src: "/" },
   { name: "Тестовая страница", src: "/old" },
 ];

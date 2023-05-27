@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { SuitHeart, SuitHeartFill } from "react-bootstrap-icons"; // иконки сердечек
 import "./card.css";
+import Ctx from "../../ctx";
 
 // const Card = (props) => { Старая версия
 //     return <div className="card-lite">
@@ -17,18 +18,9 @@ import "./card.css";
     надо проверить, есть ли в массиве likes моё id (_id => local storage => user12-id)
     Выбрать свойства, которые необходимо показывать на странице товара
 */
-const Card = ({
-  discount,
-  likes,
-  name,
-  pictures,
-  price,
-  tags,
-  _id,
-  user,
-  setBaseData,
-}) => {
-  const [isLike, setIsLike] = useState(likes.includes(user));
+const Card = ({ discount, likes, name, pictures, price, tags, _id, user }) => {
+  const { setBaseData } = useContext(Ctx);
+  const [isLike, setIsLike] = useState(likes?.includes(user) || []);
 
   const likeHandler = () => {
     // обработчик лайка
@@ -51,9 +43,11 @@ const Card = ({
   // id не должен начинаться с цифры (правило для css)
   return (
     <div className="card-lite" id={"pro_" + _id}>
-      <span className="card-like" onClick={likeHandler}>
-        {isLike ? <SuitHeartFill /> : <SuitHeart />}
-      </span>
+      {likes && (
+        <span className="card-like" onClick={likeHandler}>
+          {isLike ? <SuitHeartFill /> : <SuitHeart />}
+        </span>
+      )}
       <img src={pictures} alt={name} />
       <h4>{price} ₽</h4>
       <p>{name}</p>

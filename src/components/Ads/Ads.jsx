@@ -1,6 +1,6 @@
-import "./style.css";
 import adImg from "../../assets/images/stripses.jpg";
 import { Percent } from "react-bootstrap-icons";
+import "./style.css";
 
 const Ads = (props) => {
   return (

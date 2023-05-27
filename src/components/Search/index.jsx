@@ -1,13 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import Ctx from "../../ctx";
 import "./style.css";
 
-const Search = ({ data, setGoods, setSearchResult }) => {
-  // let text = "ololo"
+const Search = () => {
+  // так подключается контекст
+  const { setSearchResult, baseData, setGoods } = useContext(Ctx);
+
   const navigate = useNavigate();
   const [text, setText] = useState("");
   const [num, setNum] = useState(0);
-  // в переменной text находится пустая строка
+  // в переменной text находится пустая строка - изменяет текст поиска
   const changeValue = (e) => {
     navigate("/catalog"); // использование поиска на любой странице перенаправляет в Каталог
     let val = e.target.value.toLowerCase();
@@ -23,11 +26,11 @@ const Search = ({ data, setGoods, setSearchResult }) => {
     // )).length);
     // setNum(data.filter(el => el.name.toLowerCase().includes(val)).length);
   };
-  const changeText = () => {
-    console.log("Click");
-    setText("Привет!");
-  };
-  console.log(text);
+  // const changeText = () => {
+  //   console.log("Click");
+  //   setText("Привет!");
+  // };
+
   useEffect(() => {
     let str = "";
     if (num && text) {
@@ -40,12 +43,10 @@ const Search = ({ data, setGoods, setSearchResult }) => {
     setSearchResult(str);
   }, [num, text]);
   useEffect(() => {
-    // console.log("ololo");
-    let result = data.filter((el) => el.name.toLowerCase().includes(text));
+    let result = baseData.filter((el) => el.name.toLowerCase().includes(text));
     setGoods(result);
     setNum(result.length);
-    console.log(result);
-  }, [text]);
+  }, [text, baseData]);
   return (
     <>
       <input

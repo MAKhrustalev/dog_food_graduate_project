@@ -8,6 +8,7 @@ import {
   AdsSet3,
   AdsSet4,
 } from "../components/AdsSet/AdsSet";
+import Slider from "../components/Slider";
 
 import BsCard from "../components/BsCard";
 
@@ -88,6 +89,8 @@ const Home = ({ user, setActive, goods, setBaseData, userId }) => {
           <Col className="col-12">
             <Ads />
           </Col>
+          <Slider desktop={4} mobile={2} />
+          {/*Сколько карточек в ряд будет в слайдере*/}
         </Row>
       </Container>
       {/* <div className="main">

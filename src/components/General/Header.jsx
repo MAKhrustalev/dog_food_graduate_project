@@ -15,14 +15,7 @@ import Search from "../Search";
 // const Header = ({user}) => {
 //     console.log(user)
 // }
-const Header = ({
-  user,
-  upd,
-  searchArr,
-  setGoods,
-  setSearchResult,
-  setModalOpen,
-}) => {
+const Header = ({ user, searchArr, setGoods, setModalOpen }) => {
   const login = () => {
     setModalOpen(true);
     // localStorage.setItem("user12", "Vasya");
@@ -39,13 +32,13 @@ const Header = ({
         <Search
           data={searchArr}
           setGoods={setGoods}
-          setSearchResult={setSearchResult}
+          // setSearchResult={setSearchResult}
         />
       </div>
       <nav className="header__menu">
         {user && (
           <>
-            <Link to="/">
+            <Link to="/favorites">
               <BalloonHeart title="Избранное" />
             </Link>
             <Link to="/">

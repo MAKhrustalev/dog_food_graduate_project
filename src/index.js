@@ -9,10 +9,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom"; // для работы со страницами
 
-import App from "./App";
 import "bootstrap/dist/css/bootstrap.min.css"; // подключение основных стилей bootstrap
 import "./index.css";
-
+import App from "./App"; // строго после bootstrap, чтобы мои стили не переписывались бутстраповскими
 // Взять из html-файла тег, внутри которого будет работать React
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
