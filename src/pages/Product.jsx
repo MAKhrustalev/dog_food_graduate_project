@@ -64,7 +64,7 @@ const Product = () => {
       setData(serverData);
     });
   }, []);
-
+  // обработчик нажатия на кнопку удаления товара
   const delHandler = () => {
     api.delSingleProduct(id).then((data) => {
       console.log(data);
@@ -149,6 +149,7 @@ const Product = () => {
                           <Card.Text className="fs-6 text-secondary">
                             {el.text}
                           </Card.Text>
+                          {/* Корзина отзывах на карточках, добвавленных мноцй */}
                           {el.author._id === userId && (
                             <span className="text-danger position-absolute end-0 bottom-0 pe-3 pb-2">
                               <Basket2 onClick={() => delReview(el._id)} />

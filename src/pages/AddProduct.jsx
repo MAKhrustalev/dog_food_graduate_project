@@ -78,16 +78,16 @@ const AddProduct = () => {
       tags: tagWord && !tags.includes(tagWord) ? [...tags, tagWord] : tags,
     };
     console.log(body);
-    // добавляем api
+    // добавляем api добавления нового товара и обновления базы товаров
     api.addProduct(body).then((data) => {
       console.log(data);
       if (!data.err && !data.error) {
         clearForm();
         // перенаправление на страницу с новым товар
         navigate(`/product/${data._id}`);
-        // v1 - добавить товар на стороне клиента
+        // вариант1 - добавить товар в каталог на стороне клиента
         setBaseData((prev) => [...prev, data]);
-        // v2 - снова стянуть данные с сервера
+        // вариант2 - снова стянуть данные с сервера с доп соединением с базой
         // api.getProducts()
         //     .then(data => setBaseData(data.products))
       }

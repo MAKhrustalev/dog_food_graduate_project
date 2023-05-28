@@ -71,7 +71,7 @@ class Api {
       body: JSON.stringify(body),
     }).then((res) => res.json());
   }
-  // удаление отзыва на конкретный товар
+  // удаление товара и отзыва на конкретный товар
   delReview(id, r_id) {
     return fetch(`${this.path}/products/review/${id}/${r_id}`, {
       method: "DELETE",
