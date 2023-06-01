@@ -18,6 +18,7 @@ import Profile from "./pages/Profile";
 import Product from "./pages/Product";
 import AddProduct from "./pages/AddProduct";
 import Favorites from "./pages/Favorites";
+import UpdProduct from "./pages/UpdProduct";
 
 const App = () => {
   const [user, setUser] = useState(localStorage.getItem("user12"));
@@ -173,6 +174,7 @@ const App = () => {
                     */}
           <Route path="/product/:id" element={<Product />} />
           <Route path="/add/product" element={<AddProduct />} />
+          <Route path="/upd/product/:id" element={<UpdProduct />} />
         </Routes>
       </main>
       <Footer />
