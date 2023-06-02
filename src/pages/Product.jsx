@@ -102,8 +102,29 @@ const Product = () => {
   const updHandler = () => {
     api.updSingleProduct(id).then((data) => {
       console.log(data);
+
+      let {
+        id,
+        name,
+        pictures,
+        price,
+        stock,
+        wight,
+        discount,
+        description,
+        tags,
+      } = data;
+      localStorage.setItem("name", name);
+      localStorage.setItem("link", pictures);
+      localStorage.setItem("price", price);
+      localStorage.setItem("stock", stock);
+      localStorage.setItem("wight", wight);
+      localStorage.setItem("discount", discount);
+      localStorage.setItem("description", description);
+      localStorage.setItem("tags", tags);
+
       // setBaseData((prev) => prev.filter((el) => el._id !== id));
-      navigate(`/upd/product/${id}`);
+      navigate(`/upd/product/${data._id}`);
     });
   };
   return (

@@ -33,6 +33,7 @@ class Api {
       headers: this.setHeaders(),
     }).then((res) => res.json());
   }
+
   // изменение конкретного продукта
   updSingleProduct(id, body) {
     return fetch(`${this.path}/products/${id}`, {
@@ -48,6 +49,7 @@ class Api {
       headers: this.setHeaders(),
     }).then((res) => res.json());
   }
+
   // добавление одного продукта
   addProduct(body) {
     return fetch(`${this.path}/products`, {

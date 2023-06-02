@@ -15,19 +15,20 @@
 
 import { useState, useContext, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Ctx from "../ctx";
 
 const UpdProduct = () => {
   const navigate = useNavigate();
   const { api, setBaseData } = useContext(Ctx); // инициализация контекста
   const [name, setName] = useState("");
-  const [link, setLink] = useState(
-    "https://beolin.club/uploads/posts/2022-07/1657851760_12-beolin-club-p-risunok-kostochki-karandashom-krasivo-19.png"
-  ); // pictures
-  const [price, setPrice] = useState(999);
-  const [cnt, setCnt] = useState(20); // stock
-  const [description, setDescription] = useState("Скоро здесь будет текст...");
+  const [link, setLink] = useState(""); // pictures
+
+  const [price, setPrice] = useState("");
+  // const [price, setPrice] = useContext(Ctx);
+
+  const [cnt, setCnt] = useState(""); // stock
+  const [description, setDescription] = useState("");
   const [discount, setDiscount] = useState(0);
   const [wight, setWight] = useState("0 г");
   const [tagWord, setTagWord] = useState(""); // слово для массива с тегами
@@ -47,19 +48,19 @@ const UpdProduct = () => {
       setTagWord(val);
     }
   };
-  const clearForm = () => {
-    setName("");
-    setLink(
-      "https://beolin.club/uploads/posts/2022-07/1657851760_12-beolin-club-p-risunok-kostochki-karandashom-krasivo-19.png"
-    );
-    setPrice(999);
-    setCnt(20);
-    setWight("0 г");
-    setDiscount(0);
-    setDescription("Скоро здесь будет текст...");
-    setTagWord("");
-    setTags(["df"]);
-  };
+  // const clearForm = () => {
+  //   setName("");
+  //   setLink(
+  //     "https://beolin.club/uploads/posts/2022-07/1657851760_12-beolin-club-p-risunok-kostochki-karandashom-krasivo-19.png"
+  //   );
+  //   setPrice(999);
+  //   setCnt(20);
+  //   setWight("0 г");
+  //   setDiscount(0);
+  //   setDescription("Скоро здесь будет текст...");
+  //   setTagWord("");
+  //   setTags(["df"]);
+  // };
   const delTag = (e) => {
     const val = e.target.innerText;
     // Из спсика с тегами возвращаем только те, которые не соответствуют нажатому
@@ -70,8 +71,9 @@ const UpdProduct = () => {
     const body = {
       name: name,
       price: price,
+      link: link,
       discount: discount,
-      stock: cnt,
+      cnt: cnt,
       wight: wight,
       description: description,
       pictures: link,
@@ -79,13 +81,13 @@ const UpdProduct = () => {
     };
     console.log(body);
     // добавляем api добавления нового товара и обновления базы товаров
-    api.addProduct(body).then((data) => {
-      console.log(data);
+    api.updSingleProduct(body).then((data) => {
+      // console.log(data);
       if (!data.err && !data.error) {
-        clearForm();
-        // перенаправление на страницу с новым товар
+        // clearForm();
+        // перенаправление на страницу с изменяемым товар
         navigate(`/product/${data._id}`);
-        // вариант1 - добавить товар в каталог на стороне клиента
+        // вариант1 - обновить товар в каталог на стороне клиента
         setBaseData((prev) => [...prev, data]);
         // вариант2 - снова стянуть данные с сервера с доп соединением с базой
         // api.getProducts()
@@ -94,9 +96,19 @@ const UpdProduct = () => {
     });
   };
 
-  // useEffect(() => {
-  //     console.log("форма обновилась")
-  // }, [name])
+  // const [id, setID] = useState(null);
+
+  useEffect(() => {
+    setName(localStorage.getItem("name"));
+    setLink(localStorage.getItem("link"));
+    setPrice(localStorage.getItem("price"));
+    setCnt(localStorage.getItem("cnt"));
+    setWight(localStorage.getItem("wight"));
+    setDiscount(localStorage.getItem("discount"));
+    setDescription(localStorage.getItem("description"));
+    // setTags(localStorage.getItem("tagWord"));
+  }, []);
+
   return (
     <Container style={{ gridTemplateColumns: "auto" }}>
       <Row>
@@ -230,7 +242,9 @@ const UpdProduct = () => {
                   ))}
                 </Form.Text>
               </Form.Group>
-              <Button type="submit">Изменить товар</Button>
+              <Button type="submit" onClick={(id) => api.updSingleProduct}>
+                Изменить товар
+              </Button>
             </Col>
           </Row>
         </Form>
