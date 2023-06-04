@@ -19,8 +19,18 @@ import Product from "./pages/Product";
 import AddProduct from "./pages/AddProduct";
 import Favorites from "./pages/Favorites";
 import UpdProduct from "./pages/UpdProduct";
+import Basket from "./pages/Basket";
 
 const App = () => {
+  // добавление корзины
+  let basketStore = localStorage.getItem("basket12"); // локал сторадж basket12 для Корзины
+  if (basketStore && basketStore[0] === "[") {
+    // lical storage существует и он массив [
+    basketStore = JSON.parse(basketStore);
+  } else {
+    basketStore = [];
+  }
+  const [basket, setBasket] = useState(basketStore); // получаем локал сторадж
   const [user, setUser] = useState(localStorage.getItem("user12"));
   const [userId, setUserId] = useState(localStorage.getItem("user12-id"));
   const [token, setToken] = useState(localStorage.getItem("token12"));
@@ -49,6 +59,10 @@ const App = () => {
       setToken(null);
     }
   }, [user]);
+  // добавление корзины
+  useEffect(() => {
+    localStorage.setItem("basket12", JSON.stringify(basket));
+  }, [basket]);
 
   useEffect(() => {
     setApi(new Api(token)); // передаем экземпляр класса token если он есть
@@ -121,6 +135,8 @@ const App = () => {
         userId,
         token,
         api,
+        basket,
+        setBasket,
       }}
     >
       {/*<Ctx2.Provider>*/}
@@ -175,6 +191,7 @@ const App = () => {
           <Route path="/product/:id" element={<Product />} />
           <Route path="/add/product" element={<AddProduct />} />
           <Route path="/upd/product/:id" element={<UpdProduct />} />
+          <Route path="/basket" element={<Basket />} />
         </Routes>
       </main>
       <Footer />

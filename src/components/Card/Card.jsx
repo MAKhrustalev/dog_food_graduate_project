@@ -19,8 +19,10 @@ import Ctx from "../../ctx";
     Выбрать свойства, которые необходимо показывать на странице товара
 */
 const Card = ({ discount, likes, name, pictures, price, tags, _id, user }) => {
-  const { setBaseData } = useContext(Ctx);
+  const { setBaseData, basket, setBasket } = useContext(Ctx);
   const [isLike, setIsLike] = useState(likes?.includes(user) || []);
+  // товары в корзине
+  const inBasket = basket.filter((el) => _id === el.id).length > 0; // "в корзине" для этого конкретного товара
 
   const likeHandler = () => {
     // обработчик лайка
@@ -40,6 +42,21 @@ const Card = ({ discount, likes, name, pictures, price, tags, _id, user }) => {
       })
     );
   };
+  // добавление корзины
+  const addToBasket = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // Нет проверки на то, что товар уже есть в корзине и нужно увеличить его кол-во, как на стр одного товара
+    setBasket((prev) => [
+      ...prev,
+      {
+        id: _id,
+        price,
+        discount,
+        cnt: 1,
+      },
+    ]);
+  };
   // id не должен начинаться с цифры (правило для css)
   return (
     <div className="card-lite" id={"pro_" + _id}>
@@ -51,7 +68,9 @@ const Card = ({ discount, likes, name, pictures, price, tags, _id, user }) => {
       <img src={pictures} alt={name} />
       <h4>{price} ₽</h4>
       <p>{name}</p>
-      <button>Купить</button>
+      <button disabled={inBasket} onClick={addToBasket}>
+        Купить
+      </button>
       <Link to={`/products/${_id}`} className="card-link"></Link>
     </div>
   );

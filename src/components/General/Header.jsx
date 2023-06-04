@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom"; // связь с линками
 import Logo from "./Logo";
 import {
@@ -7,6 +8,7 @@ import {
   BuildingUp,
   // BuildingDown, - кнопка Выйти больше не нужна
 } from "react-bootstrap-icons";
+import Ctx from "../../ctx";
 
 import Search from "../Search";
 // const Header = (props) => {
@@ -16,6 +18,7 @@ import Search from "../Search";
 //     console.log(user)
 // }
 const Header = ({ user, searchArr, setGoods, setModalOpen }) => {
+  const { basket } = useContext(Ctx);
   const login = () => {
     setModalOpen(true);
     // localStorage.setItem("user12", "Vasya");
@@ -41,8 +44,13 @@ const Header = ({ user, searchArr, setGoods, setModalOpen }) => {
             <Link to="/favorites">
               <BalloonHeart title="Избранное" />
             </Link>
-            <Link to="/">
+            <Link to="/basket" className="header__link">
               <Cart4 title="Корзина" />
+              {basket.length > 0 && ( // если в баскете есть товары, то к сумме товаров добавить еще один товар (высветить в Хедере)
+                <span className="header__badge">
+                  {basket.reduce((acc, el) => acc + el.cnt, 0)}
+                </span>
+              )}
             </Link>
             <Link to="/profile">
               <PersonCircle title="Личный кабинет" />
