@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, createContext } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import {
   Basket2,
@@ -10,6 +10,9 @@ import {
   Award,
   CaretLeft,
   CaretRight,
+  Star,
+  StarFill,
+  Trash3,
 } from "react-bootstrap-icons";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 
@@ -22,6 +25,8 @@ import {
   Button,
   Form,
 } from "react-bootstrap";
+
+import { getEnding, getRate } from "../utilities/utilities";
 
 import Ctx from "../ctx";
 // Статичные константы (например tableInfo) выносите за компонент, они при каждом рендере пересоздаются,
@@ -50,53 +55,52 @@ const tableInfo = [
   },
 ];
 
-const Product = () => {
+const Product = ({ price, discount }) => {
   const { id } = useParams();
-  const {
-    api,
-    setBaseData,
-    likes,
-    userId,
-    inc,
-    dec,
-    del,
-    inBasket,
-    addToBasket,
-  } = useContext(Ctx);
+  const { api, setBaseData, likes, userId, basket, _id, setBasket } =
+    useContext(Ctx);
   const [data, setData] = useState({});
   const [revText, setRevText] = useState("");
   const [revRating, setRevRating] = useState(0);
   const [hideForm, setHideForm] = useState(true);
   const navigate = useNavigate();
   const [isLike, setIsLike] = useState(likes?.includes(userId));
+
   const [likeFlag, setLikeFlag] = useState(false);
 
-  const likeHandler = () => {
+  const likeHandler = (_id) => {
     setIsLike(!isLike);
     setLikeFlag(true);
   };
-  // const tableInfo = [
-  //   {
-  //     name: "wight",
-  //     text: "Вес",
-  //   },
-  //   {
-  //     name: "price",
-  //     text: "Цена, руб",
-  //   },
-  //   {
-  //     name: "discount",
-  //     text: "Попуст, %",
-  //   },
-  //   {
-  //     name: "author",
-  //     text: "Продавец",
-  //   },
-  //   {
-  //     name: "stock",
-  //     text: "Доступно, шт",
-  //   },
-  // ];
+
+  // Добавить в корзину
+  const [cnt, setCnt] = useState(0);
+  const inBasket = basket.filter((el) => _id === el.id).length > 0;
+  const addToBasket = !inBasket
+    ? (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        cnt > 1 ? setCnt(0) : setCnt(1); // Проверка, что товар уже есть в корзине и нужно увеличить его кол-во, как на стр одного товара
+        setBasket((prev) => [
+          ...prev,
+          {
+            id: _id,
+            price: data.price,
+            discount: data.discount,
+            cnt: 1,
+          },
+        ]);
+      }
+    : () => {};
+
+  // Добавление звездочек рейтинга (списал)
+  let rate = getRate(data);
+  const stars = [];
+  for (let i = 0; i < 5; i++) {
+    i < rate
+      ? stars.push(<StarFill key={`${StarFill}` + i} />)
+      : stars.push(<Star key={`${Star}` + i} />);
+  }
 
   const addReview = (e) => {
     e.preventDefault();
@@ -131,7 +135,6 @@ const Product = () => {
   // обработчик нажатия на кнопку удаления товара
   const delHandler = () => {
     api.delSingleProduct(id).then((data) => {
-      console.log(data);
       setBaseData((prev) => prev.filter((el) => el._id !== id));
       navigate("/catalog");
     });
@@ -165,8 +168,33 @@ const Product = () => {
       navigate(`/upd/product/${data._id}`);
     });
   };
-
+  // Три кнопки изменения кол-ва товара в корзине (учеличить, уменьшить, удалить)
+  const inc = (id) => {
+    setBasket((prev) =>
+      prev.map((el) => {
+        if (_id === el.id) {
+          el.cnt++;
+        }
+        return el;
+      })
+    );
+  };
+  const dec = (id) => {
+    setBasket((prev) =>
+      prev.map((el) => {
+        if (id === el.id) {
+          el.cnt--;
+        }
+        return el;
+      })
+    );
+  };
+  const del = (id) => {
+    setBasket((prev) => prev.filter((el) => el.id !== id));
+  };
+  console.log("id", id, "el.id");
   return (
+    // <Ctx.Provider value={{ inBasket, addToBasket }}>
     <Container style={{ gridTemplateColumns: "1fr" }}>
       <Row className="g-3">
         <Link className="text-black-50" to={`/catalog#pro_${id}`}>
@@ -176,7 +204,14 @@ const Product = () => {
           <>
             <Col xs={8}>
               <h3>{data.name}</h3>
-              <p className="text-warning">{data.reviews.length} отзыв</p>
+              <p className="text-warning">
+                {!!data.reviews
+                  ? `${data.reviews.length} отзыв${getEnding(
+                      data.reviews.length
+                    )}`
+                  : "Ещё нет отзывов"}
+              </p>
+              <span className="text-warning">{[...stars]}</span>
             </Col>
             <Col>
               <ButtonGroup md={5} aria-label="Basic example">
@@ -238,38 +273,78 @@ const Product = () => {
                 {Math.ceil((data.price * (100 - data.discount)) / 100)} ₽
               </Col>
               <Row className=" ms-1 me-1">
-                <Col xs={6} className="text-center">
-                  <ButtonGroup
-                    md={5}
-                    aria-label="Basic example"
-                    className="w-75"
-                  >
-                    <Button variant="outline-secondary">-</Button>
-                    <Button variant="outline-secondary">0</Button>
-                    <Button variant="outline-secondary">+</Button>
-                  </ButtonGroup>
-                </Col>
+                {basket.map(
+                  (el) =>
+                    el.id === _id && (
+                      <Col xs={6} className="text-center">
+                        <ButtonGroup
+                          md={5}
+                          aria-label="Basic example"
+                          className="w-75"
+                        >
+                          <Button
+                            variant="warning"
+                            disabled={el.cnt === 0}
+                            onClick={() => dec(el.id)}
+                          >
+                            -
+                          </Button>
+                          <Button variant="light" disabled>
+                            {el.cnt}
+                          </Button>
+                          <Button variant="warning" onClick={() => inc(el.id)}>
+                            +
+                          </Button>
+                          {/* <Button variant="outline-secondary">-</Button> */}
+                          {/* <Button variant="outline-secondary">0</Button>
+                          <Button variant="outline-secondary">+</Button> */}
+                        </ButtonGroup>
+                      </Col>
+                    )
+                )}
                 <Col xs={6} className="text-center">
                   <Button
-                    // disabled={inBasket}
-                    // onClick={addToBasket}
+                    disabled={inBasket}
+                    onClick={addToBasket}
                     variant="warning"
                     active
                     className="fw-bold rounded-pill pe-4 ps-4 w-100"
+                    style={{ cursor: "pointer" }}
                   >
-                    {/* {inBasket ? "В корзине" : "Купить"} */}
-                    Долбаная кнопка
-                  </Button>{" "}
+                    {inBasket ? "В корзине" : "Купить"}
+                  </Button>
                 </Col>
               </Row>
+              {basket.map(
+                (el) =>
+                  el.id === _id && (
+                    <Col
+                      xs={12}
+                      md={12}
+                      className="ms-1 me-1 mb-3 mt-3 text-black-50"
+                    >
+                      {
+                        <span style={{ cursor: "pointer" }}>
+                          {inBasket ? (
+                            <Trash3 onClick={() => del(el._id)} />
+                          ) : (
+                            ""
+                          )}{" "}
+                          {inBasket ? "Удалить из корзины" : ""}
+                        </span>
+                      }
+                    </Col>
+                  )
+              )}
               <Col
                 xs={12}
                 md={12}
                 className="ms-1 me-1 mb-3 mt-3 text-black-50"
               >
                 {
-                  <span onClick={likeHandler}>
-                    {isLike ? <SuitHeartFill /> : <SuitHeart />} В избранное
+                  <span onClick={likeHandler} style={{ cursor: "pointer" }}>
+                    {isLike ? <SuitHeartFill /> : <SuitHeart />}{" "}
+                    {isLike ? "В избранном" : "В избранное"}
                   </span>
                 }
               </Col>
@@ -575,6 +650,7 @@ const Product = () => {
         )}
       </Row>
     </Container>
+    // </Ctx.Provider>
   );
 };
 

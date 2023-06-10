@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext } from "react";
+import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 
 /* SPA - Single Page Application - Приложение с одной страницей */
@@ -22,7 +22,7 @@ import Favorites from "./pages/Favorites";
 import UpdProduct from "./pages/UpdProduct";
 import Basket from "./pages/Basket";
 
-const App = () => {
+const App = (likes) => {
   const userDesc = "user12"; // создал тут и раздаю в Profile, index. Не понимаю зачем нужен user12
   const userDescId = "user12-id"; // создал тут и раздаю в Profile, index. Не понимаю зачем нужен user12-id
   const userToken = "token12"; // создал тут и раздаю в  index. Не понимаю зачем нужен token12
@@ -139,6 +139,9 @@ const App = () => {
   // const Ctx = createContext({}); Класс Контекст=Ctx Маленькое приложение, хранящееся внутри нашего файла
   // import {Ctx} from "./App"
   // Route - маршрутизаторы страниц, подключаются ко всем страницам
+  // В корзине или нет
+  const inBasket = basket.filter((el) => _id === el.id).length > 0;
+
   return (
     // объявляем контекст в приложении
     /*

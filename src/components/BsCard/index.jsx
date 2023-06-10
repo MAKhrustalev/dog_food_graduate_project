@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect, createContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { SuitHeart, SuitHeartFill } from "react-bootstrap-icons";
 import { Card, Button } from "react-bootstrap"; // импорт компонентов под react-bootstrap
@@ -13,7 +13,7 @@ const BsCard = ({ discount, likes, name, pictures, price, tags, _id }) => {
 
   const inBasket = basket.filter((el) => _id === el.id).length > 0;
 
-  const likeHandler = () => {
+  const likeHandler = (_id) => {
     setIsLike(!isLike);
     setLikeFlag(true);
   };
@@ -46,6 +46,7 @@ const BsCard = ({ discount, likes, name, pictures, price, tags, _id }) => {
       },
     ]);
   };
+
   // Карточка на обычном bootstrap
   // return <div className="card pt-3" id={"pro_" + _id}>
   //     <span className="card-like" onClick={likeHandler}>
