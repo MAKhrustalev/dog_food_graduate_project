@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, createContext } from "react";
 import { Link } from "react-router-dom";
 import { SuitHeart, SuitHeartFill } from "react-bootstrap-icons";
 import { Card, Button } from "react-bootstrap"; // импорт компонентов под react-bootstrap
@@ -10,6 +10,7 @@ const BsCard = ({ discount, likes, name, pictures, price, tags, _id }) => {
   const [isLike, setIsLike] = useState(likes.includes(userId));
   //  чтобы лайки сохранялись при перезагрузке страницы, для данного пользователя
   const [likeFlag, setLikeFlag] = useState(false);
+
   const inBasket = basket.filter((el) => _id === el.id).length > 0;
 
   const likeHandler = () => {

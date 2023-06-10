@@ -4,6 +4,8 @@ import { Trash3 } from "react-bootstrap-icons";
 import Ctx from "../ctx";
 import { Link } from "react-router-dom";
 
+// создаем контекст
+
 const Basket = ({}) => {
   const { basket, setBasket, baseData } = useContext(Ctx);
   const ids = basket.map((b) => b.id);
@@ -36,7 +38,7 @@ const Basket = ({}) => {
       })
     );
   };
-  // уменьшение количества товара в корзине на 1 шт
+  // удаление товара в корзине на 1 шт
   const del = (id) => {
     setBasket((prev) => prev.filter((el) => el.id !== id));
   };
@@ -134,15 +136,3 @@ const Basket = ({}) => {
 };
 
 export default Basket;
-
-/*
- * [
- *   {
- *       id: product._id
- *       cnt: >= 1
- *       price: product.price
- *       discount: 10
- *   }
- * ]
- *
- * */

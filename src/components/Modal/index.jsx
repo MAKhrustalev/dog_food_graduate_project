@@ -2,6 +2,9 @@ import { useState, useContext } from "react";
 import { XOctagon } from "react-bootstrap-icons";
 import Ctx from "../../ctx";
 import "./style.css";
+import userDesc from "../../App";
+import userDescId from "../../App";
+import userToken from "../../App";
 
 const Modal = ({ isActive, setIsActive, setUser }) => {
   const { api } = useContext(Ctx);
@@ -58,12 +61,12 @@ const Modal = ({ isActive, setIsActive, setUser }) => {
       }
     } else {
       if (data && data.token) {
-        localStorage.setItem("token12", data.token);
+        localStorage.setItem(userToken, data.token);
       }
       if (data?.data) {
-        localStorage.setItem("user12", data.data.name);
+        localStorage.setItem(userDesc, data.data.name);
         setUser(data.data.name);
-        localStorage.setItem("user12-id", data.data._id);
+        localStorage.setItem(userDescId, data.data._id);
         clearForm();
         setIsActive(false);
       }

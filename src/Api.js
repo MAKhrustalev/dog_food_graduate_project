@@ -4,6 +4,7 @@ class Api {
     this.path = "https://api.react-learning.ru";
     this.token = token;
   }
+
   // метод вызова заголовков
   setHeaders(isContentType = false) {
     const headers = {
@@ -27,6 +28,7 @@ class Api {
       headers: this.setHeaders(),
     }).then((res) => res.json());
   }
+
   // запрос конкретного продукта
   getSingleProduct(id) {
     return fetch(`${this.path}/products/${id}`, {

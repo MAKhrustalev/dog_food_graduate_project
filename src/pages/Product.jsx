@@ -24,10 +24,45 @@ import {
 } from "react-bootstrap";
 
 import Ctx from "../ctx";
+// Статичные константы (например tableInfo) выносите за компонент, они при каждом рендере пересоздаются,
+//  а старые удаляются из памяти. В целом это ненужные действия. Хороший пример в footer.jsx,
+//  в этом файле у вас константа вынесена за компонент.
+const tableInfo = [
+  {
+    name: "wight",
+    text: "Вес",
+  },
+  {
+    name: "price",
+    text: "Цена, руб",
+  },
+  {
+    name: "discount",
+    text: "Попуст, %",
+  },
+  {
+    name: "author",
+    text: "Продавец",
+  },
+  {
+    name: "stock",
+    text: "Доступно, шт",
+  },
+];
 
 const Product = () => {
   const { id } = useParams();
-  const { api, userId, setBaseData, likes } = useContext(Ctx);
+  const {
+    api,
+    setBaseData,
+    likes,
+    userId,
+    inc,
+    dec,
+    del,
+    inBasket,
+    addToBasket,
+  } = useContext(Ctx);
   const [data, setData] = useState({});
   const [revText, setRevText] = useState("");
   const [revRating, setRevRating] = useState(0);
@@ -35,32 +70,33 @@ const Product = () => {
   const navigate = useNavigate();
   const [isLike, setIsLike] = useState(likes?.includes(userId));
   const [likeFlag, setLikeFlag] = useState(false);
+
   const likeHandler = () => {
     setIsLike(!isLike);
     setLikeFlag(true);
   };
-  const tableInfo = [
-    {
-      name: "wight",
-      text: "Вес",
-    },
-    {
-      name: "price",
-      text: "Цена, руб",
-    },
-    {
-      name: "discount",
-      text: "Попуст, %",
-    },
-    {
-      name: "author",
-      text: "Продавец",
-    },
-    {
-      name: "stock",
-      text: "Доступно, шт",
-    },
-  ];
+  // const tableInfo = [
+  //   {
+  //     name: "wight",
+  //     text: "Вес",
+  //   },
+  //   {
+  //     name: "price",
+  //     text: "Цена, руб",
+  //   },
+  //   {
+  //     name: "discount",
+  //     text: "Попуст, %",
+  //   },
+  //   {
+  //     name: "author",
+  //     text: "Продавец",
+  //   },
+  //   {
+  //     name: "stock",
+  //     text: "Доступно, шт",
+  //   },
+  // ];
 
   const addReview = (e) => {
     e.preventDefault();
@@ -86,7 +122,9 @@ const Product = () => {
 
   useEffect(() => {
     api.getSingleProduct(id).then((serverData) => {
-      console.log(id, serverData);
+      console.log(serverData);
+      // console.log(id, serverData);
+
       setData(serverData);
     });
   }, []);
@@ -127,6 +165,7 @@ const Product = () => {
       navigate(`/upd/product/${data._id}`);
     });
   };
+
   return (
     <Container style={{ gridTemplateColumns: "1fr" }}>
       <Row className="g-3">
@@ -142,7 +181,7 @@ const Product = () => {
             <Col>
               <ButtonGroup md={5} aria-label="Basic example">
                 <div>
-                  {data.author._id === userId && (
+                  {data.author._id === userId ? (
                     <Button
                       variant="outline-danger"
                       className="fw-bold"
@@ -150,15 +189,21 @@ const Product = () => {
                     >
                       <Basket2 /> Удалить
                     </Button>
-                  )}{" "}
+                  ) : (
+                    ""
+                  )}
                 </div>
-                <Button
-                  variant="outline-danger"
-                  className="fw-bold"
-                  onClick={updHandler}
-                >
-                  <Pencil /> Изменить
-                </Button>
+                {data.author._id === userId ? (
+                  <Button
+                    variant="outline-danger"
+                    className="fw-bold"
+                    onClick={updHandler}
+                  >
+                    <Pencil /> Изменить
+                  </Button>
+                ) : (
+                  ""
+                )}
               </ButtonGroup>
             </Col>
             <Col xs={12} md={6}>
@@ -206,11 +251,14 @@ const Product = () => {
                 </Col>
                 <Col xs={6} className="text-center">
                   <Button
+                    // disabled={inBasket}
+                    // onClick={addToBasket}
                     variant="warning"
                     active
                     className="fw-bold rounded-pill pe-4 ps-4 w-100"
                   >
-                    В корзину
+                    {/* {inBasket ? "В корзине" : "Купить"} */}
+                    Долбаная кнопка
                   </Button>{" "}
                 </Col>
               </Row>
@@ -374,7 +422,6 @@ const Product = () => {
                                 }).format(Date.parse(el.created_at))}
                               </span>
                             </span>
-
                             <Card.Title>{el.rating}</Card.Title>
                             <Card.Text className="fs-6 text-secondary">
                               {el.text}
@@ -390,17 +437,6 @@ const Product = () => {
                       </Col>
                     ))
                     .slice(0, 4)}
-                  {/* {hideForm && (
-                    <Col>
-                      <Button
-                        variant="outline-info"
-                        className="fs-1 w-100 h-100"
-                        onClick={() => setHideForm(false)}
-                      >
-                        <Plus />
-                      </Button>
-                    </Col>
-                  )} */}
                 </Row>
               </Col>
             ) : (

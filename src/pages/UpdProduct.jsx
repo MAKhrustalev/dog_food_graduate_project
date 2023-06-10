@@ -19,9 +19,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import Ctx from "../ctx";
 
 const UpdProduct = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   const { api, setBaseData } = useContext(Ctx); // инициализация контекста
   const [name, setName] = useState("");
+
   const [link, setLink] = useState(""); // pictures
 
   const [price, setPrice] = useState("");
@@ -48,19 +50,18 @@ const UpdProduct = () => {
       setTagWord(val);
     }
   };
-  // const clearForm = () => {
-  //   setName("");
-  //   setLink(
-  //     "https://beolin.club/uploads/posts/2022-07/1657851760_12-beolin-club-p-risunok-kostochki-karandashom-krasivo-19.png"
-  //   );
-  //   setPrice(999);
-  //   setCnt(20);
-  //   setWight("0 г");
-  //   setDiscount(0);
-  //   setDescription("Скоро здесь будет текст...");
-  //   setTagWord("");
-  //   setTags(["df"]);
-  // };
+
+  useEffect(() => {
+    setName(localStorage.getItem("name"));
+    setLink(localStorage.getItem("link"));
+    setPrice(localStorage.getItem("price"));
+    setCnt(localStorage.getItem("cnt"));
+    setWight(localStorage.getItem("wight"));
+    setDiscount(localStorage.getItem("discount"));
+    setDescription(localStorage.getItem("description"));
+    // setTags(localStorage.getItem("tagWord"));
+  }, []);
+
   const delTag = (e) => {
     const val = e.target.innerText;
     // Из спсика с тегами возвращаем только те, которые не соответствуют нажатому
@@ -79,35 +80,33 @@ const UpdProduct = () => {
       pictures: link,
       tags: tagWord && !tags.includes(tagWord) ? [...tags, tagWord] : tags,
     };
-    console.log(body);
+    console.log("body", body.price);
+
     // добавляем api добавления нового товара и обновления базы товаров
-    api.updSingleProduct(body).then((data) => {
-      // console.log(data);
+    api.updSingleProduct(id).then((data) => {
+      console.log(data);
       if (!data.err && !data.error) {
-        // clearForm();
+        // setPrice(body.price);
+        // setPrice((prev) => [...prev, body.price]);
+        localStorage.setItem("id", JSON.stringify(body));
+        localStorage.setItem("price", price);
+        console.log(price);
         // перенаправление на страницу с изменяемым товар
         navigate(`/product/${data._id}`);
+        // navigate(`/product/${data.id}`);
+
         // вариант1 - обновить товар в каталог на стороне клиента
-        setBaseData((prev) => [...prev, data]);
+        // setBaseData((prev) => [...prev, data]);
+        // console.log(body);
+        // localStorage.setItem("id", JSON.stringify(body));
         // вариант2 - снова стянуть данные с сервера с доп соединением с базой
         // api.getProducts()
         //     .then(data => setBaseData(data.products))
       }
     });
   };
-
+  console.log(price);
   // const [id, setID] = useState(null);
-
-  useEffect(() => {
-    setName(localStorage.getItem("name"));
-    setLink(localStorage.getItem("link"));
-    setPrice(localStorage.getItem("price"));
-    setCnt(localStorage.getItem("cnt"));
-    setWight(localStorage.getItem("wight"));
-    setDiscount(localStorage.getItem("discount"));
-    setDescription(localStorage.getItem("description"));
-    // setTags(localStorage.getItem("tagWord"));
-  }, []);
 
   return (
     <Container style={{ gridTemplateColumns: "auto" }}>
@@ -242,7 +241,7 @@ const UpdProduct = () => {
                   ))}
                 </Form.Text>
               </Form.Group>
-              <Button type="submit" onClick={(id) => api.updSingleProduct}>
+              <Button type="submit" onClick={() => api.updSingleProduct}>
                 Изменить товар
               </Button>
             </Col>

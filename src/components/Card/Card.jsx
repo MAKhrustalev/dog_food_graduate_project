@@ -15,12 +15,13 @@ import Ctx from "../../ctx";
 
 /*
     Для получения или установки товара как избранное (like), 
-    надо проверить, есть ли в массиве likes моё id (_id => local storage => user12-id)
+    надо проверить, есть ли в массиве likes моё id (_id => local storage => userDescId)
     Выбрать свойства, которые необходимо показывать на странице товара
 */
 const Card = ({ discount, likes, name, pictures, price, tags, _id, user }) => {
   const { setBaseData, basket, setBasket } = useContext(Ctx);
   const [isLike, setIsLike] = useState(likes?.includes(user) || []);
+
   // товары в корзине
   const inBasket = basket.filter((el) => _id === el.id).length > 0; // "в корзине" для этого конкретного товара
 

@@ -6,6 +6,7 @@ import { Routes, Route } from "react-router-dom";
 // import testData from "./assents/data.json";
 import Ctx from "./ctx";
 import Api from "./Api";
+
 // Подключаем компоненты
 import Modal from "./components/Modal";
 import { Header, Footer } from "./components/General"; // index.jsx
@@ -22,8 +23,12 @@ import UpdProduct from "./pages/UpdProduct";
 import Basket from "./pages/Basket";
 
 const App = () => {
+  const userDesc = "user12"; // создал тут и раздаю в Profile, index. Не понимаю зачем нужен user12
+  const userDescId = "user12-id"; // создал тут и раздаю в Profile, index. Не понимаю зачем нужен user12-id
+  const userToken = "token12"; // создал тут и раздаю в  index. Не понимаю зачем нужен token12
+  const userBasket = "basket12"; // создал тут и раздаю тут. Не понимаю зачем нужен basket12
   // добавление корзины
-  let basketStore = localStorage.getItem("basket12"); // локал сторадж basket12 для Корзины
+  let basketStore = localStorage.getItem(userBasket); // локал сторадж userBasket для Корзины
   if (basketStore && basketStore[0] === "[") {
     // lical storage существует и он массив [
     basketStore = JSON.parse(basketStore);
@@ -31,9 +36,9 @@ const App = () => {
     basketStore = [];
   }
   const [basket, setBasket] = useState(basketStore); // получаем локал сторадж
-  const [user, setUser] = useState(localStorage.getItem("user12"));
-  const [userId, setUserId] = useState(localStorage.getItem("user12-id"));
-  const [token, setToken] = useState(localStorage.getItem("token12"));
+  const [user, setUser] = useState(localStorage.getItem(userDesc));
+  const [userId, setUserId] = useState(localStorage.getItem(userDesc));
+  const [token, setToken] = useState(localStorage.getItem(userToken));
   const [api, setApi] = useState(new Api(token));
   /*
         Есть массив с товарами (основной) [a,b,c] => [b,c] => [a]???
@@ -46,22 +51,29 @@ const App = () => {
 
   const [searchResult, setSearchResult] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
+  const [inc, setInc] = useState();
+  const [dec, setDec] = useState();
+  const [del, setDel] = useState();
+  const [_id, set_id] = useState();
+  const [price, setPrice] = useState();
+  const [discount, setDiscount] = useState();
+
   // Сохрани в переменную user то значение, что находится внутри useState
 
   useEffect(() => {
     if (user) {
-      setUserId(localStorage.getItem("user12-id"));
-      setToken(localStorage.getItem("token12"));
+      setUserId(localStorage.getItem(userDescId));
+      setToken(localStorage.getItem(userToken));
     } else {
-      localStorage.removeItem("user12-id");
-      localStorage.removeItem("token12");
+      localStorage.removeItem(userDescId);
+      localStorage.removeItem(userToken);
       setUserId(null);
       setToken(null);
     }
   }, [user]);
   // добавление корзины
   useEffect(() => {
-    localStorage.setItem("basket12", JSON.stringify(basket));
+    localStorage.setItem(userBasket, JSON.stringify(basket));
   }, [basket]);
 
   useEffect(() => {
@@ -108,6 +120,22 @@ const App = () => {
     // setGoods(baseData)
   }, [baseData]);
 
+  // const inBasket = basket.filter((el) => _id === el.id).length > 0;
+  // const addToBasket = (e) => {
+  //   e.preventDefault();
+  //   e.stopPropagation();
+  //   // Нет проверки на то, что товар уже есть в корзине и нужно увеличить его кол-во, как на стр одного товара
+  //   setBasket((prev) => [
+  //     ...prev,
+  //     {
+  //       id: _id,
+  //       price,
+  //       discount,
+  //       cnt: 1,
+  //     },
+  //   ]);
+  // };
+
   // const Ctx = createContext({}); Класс Контекст=Ctx Маленькое приложение, хранящееся внутри нашего файла
   // import {Ctx} from "./App"
   // Route - маршрутизаторы страниц, подключаются ко всем страницам
@@ -123,7 +151,7 @@ const App = () => {
      * */
     // Все страницы внутри Контехта могут обращаться к данным Контекста
     // независимо от уровня вложенности
-    // Инициализация Контекста:
+    // Инициализация Контекста - для передачи значений и функций в другие элементы приложения
     <Ctx.Provider
       value={{
         searchResult,
@@ -137,9 +165,12 @@ const App = () => {
         api,
         basket,
         setBasket,
+        inc,
+        dec,
+        del,
       }}
     >
-      {/*<Ctx2.Provider>*/}
+      {/* <Ctx2.Provider> */}
       {/*Так можно использовать еще один контекст для ограниченного количества компнентов*/}
       <Header
         user={user}

@@ -4,6 +4,8 @@ import { useNavigate, Link } from "react-router-dom";
 import { Button, Container, Row, Col, Figure } from "react-bootstrap";
 import Ctx from "../ctx";
 
+import userDesc from "../App";
+
 import UpdatedInput from "../components/UpdatedInput";
 import BsCard from "../components/BsCard";
 
@@ -28,7 +30,7 @@ const Profile = ({ setUser }) => {
 
   const logOut = () => {
     setUser("");
-    localStorage.removeItem("user12");
+    localStorage.removeItem(userDesc);
     navigate("/");
   };
   useEffect(() => {
