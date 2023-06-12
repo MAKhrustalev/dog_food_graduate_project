@@ -22,7 +22,7 @@ import Favorites from "./pages/Favorites";
 import UpdProduct from "./pages/UpdProduct";
 import Basket from "./pages/Basket";
 
-const App = (likes) => {
+const App = () => {
   const userDesc = "user12"; // создал тут и раздаю в Profile, index. Не понимаю зачем нужен user12
   const userDescId = "user12-id"; // создал тут и раздаю в Profile, index. Не понимаю зачем нужен user12-id
   const userToken = "token12"; // создал тут и раздаю в  index. Не понимаю зачем нужен token12
@@ -35,11 +35,12 @@ const App = (likes) => {
   } else {
     basketStore = [];
   }
-  const [basket, setBasket] = useState(basketStore); // получаем локал сторадж
+
   const [user, setUser] = useState(localStorage.getItem(userDesc));
   const [userId, setUserId] = useState(localStorage.getItem(userDesc));
   const [token, setToken] = useState(localStorage.getItem(userToken));
   const [api, setApi] = useState(new Api(token));
+  const [basket, setBasket] = useState(basketStore); // получаем локал сторадж
   /*
         Есть массив с товарами (основной) [a,b,c] => [b,c] => [a]???
         | |
@@ -51,12 +52,6 @@ const App = (likes) => {
 
   const [searchResult, setSearchResult] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
-  const [inc, setInc] = useState();
-  const [dec, setDec] = useState();
-  const [del, setDel] = useState();
-  const [_id, set_id] = useState();
-  const [price, setPrice] = useState();
-  const [discount, setDiscount] = useState();
 
   // Сохрани в переменную user то значение, что находится внутри useState
 
@@ -120,27 +115,9 @@ const App = (likes) => {
     // setGoods(baseData)
   }, [baseData]);
 
-  // const inBasket = basket.filter((el) => _id === el.id).length > 0;
-  // const addToBasket = (e) => {
-  //   e.preventDefault();
-  //   e.stopPropagation();
-  //   // Нет проверки на то, что товар уже есть в корзине и нужно увеличить его кол-во, как на стр одного товара
-  //   setBasket((prev) => [
-  //     ...prev,
-  //     {
-  //       id: _id,
-  //       price,
-  //       discount,
-  //       cnt: 1,
-  //     },
-  //   ]);
-  // };
-
   // const Ctx = createContext({}); Класс Контекст=Ctx Маленькое приложение, хранящееся внутри нашего файла
   // import {Ctx} from "./App"
   // Route - маршрутизаторы страниц, подключаются ко всем страницам
-  // В корзине или нет
-  const inBasket = basket.filter((el) => _id === el.id).length > 0;
 
   return (
     // объявляем контекст в приложении
@@ -168,9 +145,6 @@ const App = (likes) => {
         api,
         basket,
         setBasket,
-        inc,
-        dec,
-        del,
       }}
     >
       {/* <Ctx2.Provider> */}

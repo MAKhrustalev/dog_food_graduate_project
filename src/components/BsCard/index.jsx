@@ -11,8 +11,6 @@ const BsCard = ({ discount, likes, name, pictures, price, tags, _id }) => {
   //  чтобы лайки сохранялись при перезагрузке страницы, для данного пользователя
   const [likeFlag, setLikeFlag] = useState(false);
 
-  const inBasket = basket.filter((el) => _id === el.id).length > 0;
-
   const likeHandler = (_id) => {
     setIsLike(!isLike);
     setLikeFlag(true);
@@ -32,6 +30,7 @@ const BsCard = ({ discount, likes, name, pictures, price, tags, _id }) => {
     }
   }, [isLike, _id, api, likeFlag, setBaseData]); // deps '_id', 'api', 'likeFlag', 'setBaseData' добавил, тк прога ругалась
   // добавить в корзину
+  const inBasket = basket.filter((el) => _id === el.id).length > 0;
   const addToBasket = (e) => {
     e.preventDefault();
     e.stopPropagation();

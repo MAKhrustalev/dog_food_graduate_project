@@ -55,10 +55,9 @@ const tableInfo = [
   },
 ];
 
-const Product = ({ price, discount }) => {
+const Product = ({ discount, likes, price, name, pictures, tags, _id }) => {
   const { id } = useParams();
-  const { api, setBaseData, likes, userId, basket, _id, setBasket } =
-    useContext(Ctx);
+  const { api, setBaseData, userId, basket, setBasket } = useContext(Ctx);
   const [data, setData] = useState({});
   const [revText, setRevText] = useState("");
   const [revRating, setRevRating] = useState(0);
@@ -68,30 +67,10 @@ const Product = ({ price, discount }) => {
 
   const [likeFlag, setLikeFlag] = useState(false);
 
-  const likeHandler = (_id) => {
+  const likeHandler = () => {
     setIsLike(!isLike);
     setLikeFlag(true);
   };
-
-  // Добавить в корзину
-  const [cnt, setCnt] = useState(0);
-  const inBasket = basket.filter((el) => _id === el.id).length > 0;
-  const addToBasket = !inBasket
-    ? (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        cnt > 1 ? setCnt(0) : setCnt(1); // Проверка, что товар уже есть в корзине и нужно увеличить его кол-во, как на стр одного товара
-        setBasket((prev) => [
-          ...prev,
-          {
-            id: _id,
-            price: data.price,
-            discount: data.discount,
-            cnt: 1,
-          },
-        ]);
-      }
-    : () => {};
 
   // Добавление звездочек рейтинга (списал)
   let rate = getRate(data);
@@ -127,8 +106,6 @@ const Product = ({ price, discount }) => {
   useEffect(() => {
     api.getSingleProduct(id).then((serverData) => {
       console.log(serverData);
-      // console.log(id, serverData);
-
       setData(serverData);
     });
   }, []);
@@ -143,56 +120,56 @@ const Product = ({ price, discount }) => {
   const updHandler = () => {
     api.updSingleProduct(id).then((data) => {
       console.log(data);
-
-      let {
-        id,
-        name,
-        pictures,
-        price,
-        stock,
-        wight,
-        discount,
-        description,
-        tags,
-      } = data;
-      localStorage.setItem("name", name);
-      localStorage.setItem("link", pictures);
-      localStorage.setItem("price", price);
-      localStorage.setItem("stock", stock);
-      localStorage.setItem("wight", wight);
-      localStorage.setItem("discount", discount);
-      localStorage.setItem("description", description);
-      localStorage.setItem("tags", tags);
-
-      // setBaseData((prev) => prev.filter((el) => el._id !== id));
       navigate(`/upd/product/${data._id}`);
     });
   };
+
+  // Добавить в корзину
+  const [cnt, setCnt] = useState(0);
+  const inBasket = basket.filter((el) => _id === el.id).length > 0;
+  const addToBasket = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // Нет проверки на то, что товар уже есть в корзине и нужно увеличить его кол-во, как на стр одного товара
+    setBasket((prev) => [
+      ...prev,
+      {
+        id: _id,
+        price: price,
+        discount,
+        cnt: 1,
+      },
+    ]);
+  };
+
   // Три кнопки изменения кол-ва товара в корзине (учеличить, уменьшить, удалить)
   const inc = (id) => {
     setBasket((prev) =>
       prev.map((el) => {
-        if (_id === el.id) {
+        if (el.id === el.id) {
           el.cnt++;
         }
         return el;
       })
     );
   };
+
   const dec = (id) => {
     setBasket((prev) =>
       prev.map((el) => {
-        if (id === el.id) {
+        if (el.id === id) {
           el.cnt--;
         }
         return el;
       })
     );
   };
-  const del = (id) => {
-    setBasket((prev) => prev.filter((el) => el.id !== id));
+  const del = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setBasket((prev) => prev.filter((el) => el.id !== _id));
   };
-  console.log("id", id, "el.id");
+
   return (
     // <Ctx.Provider value={{ inBasket, addToBasket }}>
     <Container style={{ gridTemplateColumns: "1fr" }}>
@@ -273,41 +250,41 @@ const Product = ({ price, discount }) => {
                 {Math.ceil((data.price * (100 - data.discount)) / 100)} ₽
               </Col>
               <Row className=" ms-1 me-1">
-                {basket.map(
-                  (el) =>
-                    el.id === _id && (
-                      <Col xs={6} className="text-center">
-                        <ButtonGroup
-                          md={5}
-                          aria-label="Basic example"
-                          className="w-75"
-                        >
-                          <Button
-                            variant="warning"
-                            disabled={el.cnt === 0}
-                            onClick={() => dec(el.id)}
-                          >
-                            -
-                          </Button>
-                          <Button variant="light" disabled>
-                            {el.cnt}
-                          </Button>
-                          <Button variant="warning" onClick={() => inc(el.id)}>
-                            +
-                          </Button>
-                          {/* <Button variant="outline-secondary">-</Button> */}
-                          {/* <Button variant="outline-secondary">0</Button>
+                {/* {(el) =>
+                  el.id === id && ( */}
+                <Col xs={6} className="text-center">
+                  <ButtonGroup
+                    md={5}
+                    aria-label="Basic example"
+                    className="w-75"
+                    display-none={!inBasket}
+                  >
+                    <Button
+                      variant="warning"
+                      disabled={cnt === 1}
+                      onClick={() => dec(id)}
+                    >
+                      -
+                    </Button>
+                    <Button variant="light" disabled>
+                      {(el) => el.cnt}
+                    </Button>
+                    <Button variant="warning" onClick={() => inc(id)}>
+                      +
+                    </Button>
+                    {/* <Button variant="outline-secondary">-</Button> */}
+                    {/* <Button variant="outline-secondary">0</Button>
                           <Button variant="outline-secondary">+</Button> */}
-                        </ButtonGroup>
-                      </Col>
-                    )
-                )}
+                  </ButtonGroup>
+                </Col>
+                {/* ) */}
+                {/* } */}
                 <Col xs={6} className="text-center">
                   <Button
                     disabled={inBasket}
                     onClick={addToBasket}
                     variant="warning"
-                    active
+                    // active
                     className="fw-bold rounded-pill pe-4 ps-4 w-100"
                     style={{ cursor: "pointer" }}
                   >
@@ -315,27 +292,23 @@ const Product = ({ price, discount }) => {
                   </Button>
                 </Col>
               </Row>
-              {basket.map(
-                (el) =>
-                  el.id === _id && (
-                    <Col
-                      xs={12}
-                      md={12}
-                      className="ms-1 me-1 mb-3 mt-3 text-black-50"
-                    >
-                      {
-                        <span style={{ cursor: "pointer" }}>
-                          {inBasket ? (
-                            <Trash3 onClick={() => del(el._id)} />
-                          ) : (
-                            ""
-                          )}{" "}
-                          {inBasket ? "Удалить из корзины" : ""}
-                        </span>
-                      }
-                    </Col>
-                  )
-              )}
+              {(el) =>
+                el.id === id && (
+                  <Col
+                    xs={12}
+                    md={12}
+                    className="ms-1 me-1 mb-3 mt-3 text-black-50"
+                  >
+                    {
+                      <span style={{ cursor: "pointer" }}>
+                        {/* Проверить есть ли товар в корзине */}
+                        {inBasket ? <Trash3 onClick={del} /> : ""}{" "}
+                        {inBasket ? "Удалить из корзины" : ""}
+                      </span>
+                    }
+                  </Col>
+                )
+              }
               <Col
                 xs={12}
                 md={12}
