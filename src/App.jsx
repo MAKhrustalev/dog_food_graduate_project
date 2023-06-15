@@ -21,12 +21,13 @@ import AddProduct from "./pages/AddProduct";
 import Favorites from "./pages/Favorites";
 import UpdProduct from "./pages/UpdProduct";
 import Basket from "./pages/Basket";
+// Не работает авторизация. Нужно вынести переменные для localStorage за компонент и обновить импорты в Modal/index.jsx
+export const userDesc = "user12"; // создал тут и раздаю в Profile, index. Не понимаю зачем нужен user12
+export const userDescId = "user12-id"; // создал тут и раздаю в Profile, index. Не понимаю зачем нужен user12-id
+export const userToken = "token12"; // создал тут и раздаю в  index. Не понимаю зачем нужен token12
+export const userBasket = "basket12"; // создал тут и раздаю тут. Не понимаю зачем нужен basket12
 
 const App = () => {
-  const userDesc = "user12"; // создал тут и раздаю в Profile, index. Не понимаю зачем нужен user12
-  const userDescId = "user12-id"; // создал тут и раздаю в Profile, index. Не понимаю зачем нужен user12-id
-  const userToken = "token12"; // создал тут и раздаю в  index. Не понимаю зачем нужен token12
-  const userBasket = "basket12"; // создал тут и раздаю тут. Не понимаю зачем нужен basket12
   // добавление корзины
   let basketStore = localStorage.getItem(userBasket); // локал сторадж userBasket для Корзины
   if (basketStore && basketStore[0] === "[") {

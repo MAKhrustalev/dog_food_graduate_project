@@ -4,7 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { Button, Container, Row, Col, Figure } from "react-bootstrap";
 import Ctx from "../ctx";
 
-import userDesc from "../App";
+import { userDesc } from "../App";
 
 import UpdatedInput from "../components/UpdatedInput";
 import BsCard from "../components/BsCard";
@@ -84,7 +84,7 @@ const Profile = ({ setUser }) => {
             </>
           )}
         </Row>
-        <Link to="/add/product">Добавить товар</Link>
+        {/* <Link to="/add/product">Добавить товар</Link> */}
         <Button variant="warning" as={Link} to="/add/product">
           Добавить товар
         </Button>

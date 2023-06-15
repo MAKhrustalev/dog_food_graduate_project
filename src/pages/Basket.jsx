@@ -1,6 +1,13 @@
 import { useState, useContext, Fragment } from "react";
-import { Container, Table, ButtonGroup, Button } from "react-bootstrap";
-import { Trash3 } from "react-bootstrap-icons";
+import {
+  Container,
+  Table,
+  ButtonGroup,
+  Button,
+  Row,
+  Col,
+} from "react-bootstrap";
+import { Trash3, EmojiFrown } from "react-bootstrap-icons";
 import Ctx from "../ctx";
 import { Link } from "react-router-dom";
 
@@ -144,7 +151,44 @@ const Basket = ({}) => {
           </Table>
         </>
       ) : (
-        <h3>Ваша корзина пуста - нашим детям голодно</h3>
+        <Container style={{ gridTemplateColumns: "1fr" }}>
+          <Row>
+            <Col
+              xs={12}
+              className="d-flex align-items-center justify-content-center text-center"
+            >
+              <EmojiFrown size={50} color="grey" />
+            </Col>
+            <Col
+              xs={12}
+              className="d-flex align-items-center justify-content-center text-center pt-5"
+            >
+              <h4>В корзине нет товаров</h4>
+            </Col>
+            <Col
+              xs={12}
+              className="d-flex align-items-center justify-content-center text-center"
+            >
+              <p className="text-secondary">
+                Добавьте товар, нажав кнопку "В корзину" в карточке товара
+              </p>
+            </Col>
+            <Col
+              xs={12}
+              className="d-flex align-items-center justify-content-center text-center"
+            >
+              <Button
+                variant="outline-secondary fw-bold rounded-pill"
+                className="text-dark"
+                onClick={clearBasket}
+                as={Link}
+                to="/"
+              >
+                На главную
+              </Button>
+            </Col>
+          </Row>
+        </Container>
       )}
     </Container>
   );

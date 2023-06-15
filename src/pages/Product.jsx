@@ -66,6 +66,7 @@ const Product = ({ discount, likes, price, name, pictures, tags, _id }) => {
   const [isLike, setIsLike] = useState(likes?.includes(userId));
 
   const [likeFlag, setLikeFlag] = useState(false);
+  const [hideReview, setHideReview] = useState(true);
 
   const likeHandler = () => {
     setIsLike(!isLike);
@@ -98,15 +99,14 @@ const Product = ({ discount, likes, price, name, pictures, tags, _id }) => {
 
   const delReview = (id) => {
     api.delReview(data._id, id).then((d) => {
-      console.log(data);
       setData(d);
     });
   };
-
+  // Из за этой же ошибки у вас isLike стейт определяется не правильно. Нужно обновить стейт, как получите продукт.
   useEffect(() => {
     api.getSingleProduct(id).then((serverData) => {
-      console.log(serverData);
       setData(serverData);
+      setIsLike(serverData.likes?.includes(userId));
     });
   }, []);
   // обработчик нажатия на кнопку удаления товара
@@ -126,7 +126,8 @@ const Product = ({ discount, likes, price, name, pictures, tags, _id }) => {
 
   // Добавить в корзину
   const [cnt, setCnt] = useState(0);
-  const inBasket = basket.filter((el) => _id === el.id).length > 0;
+  const inBasket = basket.filter((el) => id === el.id).length > 0; // Переменная inBasket такая же ошибка. Используете _id(из пропсов), но такой переменной нет. Берем просто id из params или data._id
+  // Функция addToBasket. Используя setBasket вы кладете в стейт некорректные данные. Поэтому у вас они не бьются потом с каталогом. Данные для id, price и discount нужно брать из стейта data(вы берете из пропсов, но если посмотреть в App компонент, то увидим что вы туда ничего не пробрасываете).
   const addToBasket = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -134,9 +135,10 @@ const Product = ({ discount, likes, price, name, pictures, tags, _id }) => {
     setBasket((prev) => [
       ...prev,
       {
-        id: _id,
-        price: price,
-        discount,
+        id: data._id,
+        name: data.name,
+        price: data.price,
+        discount: data.discount,
         cnt: 1,
       },
     ]);
@@ -146,14 +148,13 @@ const Product = ({ discount, likes, price, name, pictures, tags, _id }) => {
   const inc = (id) => {
     setBasket((prev) =>
       prev.map((el) => {
-        if (el.id === el.id) {
+        if (el.id === id) {
           el.cnt++;
         }
         return el;
       })
     );
   };
-
   const dec = (id) => {
     setBasket((prev) =>
       prev.map((el) => {
@@ -164,14 +165,14 @@ const Product = ({ discount, likes, price, name, pictures, tags, _id }) => {
       })
     );
   };
+  // функция del такая же ошибка. Меняем _id на id или data._id
   const del = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    setBasket((prev) => prev.filter((el) => el.id !== _id));
+    setBasket((prev) => prev.filter((el) => el.id !== id));
   };
 
   return (
-    // <Ctx.Provider value={{ inBasket, addToBasket }}>
     <Container style={{ gridTemplateColumns: "1fr" }}>
       <Row className="g-3">
         <Link className="text-black-50" to={`/catalog#pro_${id}`}>
@@ -250,8 +251,6 @@ const Product = ({ discount, likes, price, name, pictures, tags, _id }) => {
                 {Math.ceil((data.price * (100 - data.discount)) / 100)} ₽
               </Col>
               <Row className=" ms-1 me-1">
-                {/* {(el) =>
-                  el.id === id && ( */}
                 <Col xs={6} className="text-center">
                   <ButtonGroup
                     md={5}
@@ -261,13 +260,20 @@ const Product = ({ discount, likes, price, name, pictures, tags, _id }) => {
                   >
                     <Button
                       variant="warning"
-                      disabled={cnt === 1}
+                      disabled={
+                        Array.isArray(basket) &&
+                        basket.find((basketEl) => basketEl.id === id)?.cnt === 1
+                      }
                       onClick={() => dec(id)}
                     >
                       -
                     </Button>
                     <Button variant="light" disabled>
-                      {(el) => el.cnt}
+                      {/* Max - Не понял как вы определяете количество для рендеринга. Нужно искать по корзине соответствующий товар и выводить его cnt */}
+                      {Array.isArray(basket)
+                        ? basket.find((basketEl) => basketEl.id === id)?.cnt ??
+                          0
+                        : 0}
                     </Button>
                     <Button variant="warning" onClick={() => inc(id)}>
                       +
@@ -292,23 +298,19 @@ const Product = ({ discount, likes, price, name, pictures, tags, _id }) => {
                   </Button>
                 </Col>
               </Row>
-              {(el) =>
-                el.id === id && (
-                  <Col
-                    xs={12}
-                    md={12}
-                    className="ms-1 me-1 mb-3 mt-3 text-black-50"
-                  >
-                    {
-                      <span style={{ cursor: "pointer" }}>
-                        {/* Проверить есть ли товар в корзине */}
-                        {inBasket ? <Trash3 onClick={del} /> : ""}{" "}
-                        {inBasket ? "Удалить из корзины" : ""}
-                      </span>
-                    }
-                  </Col>
-                )
-              }
+
+              <Col
+                xs={12}
+                md={12}
+                className="ms-1 me-1 mb-3 mt-3 text-black-50"
+              >
+                <span style={{ cursor: "pointer" }} onClick={del}>
+                  {/* Проверить есть ли товар в корзине */}
+                  {inBasket ? <Trash3 /> : ""}{" "}
+                  {inBasket ? "Удалить из корзины" : ""}
+                </span>
+              </Col>
+
               <Col
                 xs={12}
                 md={12}
@@ -488,19 +490,6 @@ const Product = ({ discount, likes, price, name, pictures, tags, _id }) => {
                 </Row>
               </Col>
             ) : (
-              //   hideForm && (
-              //     <Col>
-              //       <Button
-              //         variant="outline-info"
-              //         onClick={() => setHideForm(false)}
-              //         className="fw-bold"
-              //       >
-              //         Написать отзыв
-              //       </Button>
-              //     </Col>
-              //   )
-              // )}
-
               hideForm && (
                 <Col className="pt-3 pb-3" xs={12} md={4}>
                   <Button
@@ -513,98 +502,59 @@ const Product = ({ discount, likes, price, name, pictures, tags, _id }) => {
                 </Col>
               )
             )}
-            {!hideForm && (
-              <Col xs={12} className="mt-5">
-                <h3>Новый отзыв</h3>
-                <Form onSubmit={addReview}>
-                  <Form.Group className="mb-3">
-                    <Form.Label htmlFor="rating">Рейтинг (0-5)</Form.Label>
-                    <Form.Control
-                      type="number"
-                      min={1}
-                      max={5}
-                      step={1}
-                      id="rating"
-                      value={revRating}
-                      onChange={(e) => setRevRating(+e.target.value)}
-                    />
-                  </Form.Group>
-                  <Form.Group className="mb-3">
-                    <Form.Label htmlFor="text">Комментарий:</Form.Label>
-                    <Form.Control
-                      as="textarea"
-                      type="text"
-                      id="text"
-                      value={revText}
-                      rows={3}
-                      onChange={(e) => setRevText(e.target.value)}
-                    />
-                  </Form.Group>
-                  <Button
-                    type="reset"
-                    className="me-2 btn-warning mb-5"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setRevText("");
-                      setRevRating(0);
-                      setHideForm(true);
-                    }}
-                  >
-                    Отмена
-                  </Button>
-                  <Button type="submit" className="btn-warning mb-5">
-                    Добавить
-                  </Button>
-                </Form>
-              </Col>
+            {!hideReview && (
+              <Row className="g-3">
+                {data.reviews
+                  .map((el) => (
+                    <Col xs={12} sm={12} md={12} key={el._id}>
+                      <Card className="h-100">
+                        <Card.Body>
+                          <span className="d-flex w-100 align-items-center mb-2">
+                            <span
+                              style={{
+                                width: "30px",
+                                height: "30px",
+                                display: "block",
+                                backgroundPosition: "center",
+                                backgroundRepeat: "no-repeat",
+                                backgroundSize: "cover",
+                                backgroundImage: `url(${el.author.avatar})`,
+                                marginRight: "1rem",
+                                borderRadius: "50%",
+                              }}
+                            />
+                            <span>{el.author.name}</span>
+                            <span className="ps-3 fw-normal">
+                              {Intl.DateTimeFormat("ru-RU", {
+                                dateStyle: "medium",
+                              }).format(Date.parse(el.created_at))}
+                            </span>
+                          </span>
+                          <Card.Title>{el.rating}</Card.Title>
+                          <Card.Text className="fs-6 text-secondary">
+                            {el.text}
+                          </Card.Text>
+                          {/* Корзина удаления отзывов, добавленных мной */}
+                          {el.author._id === userId && (
+                            <span className="text-danger position-absolute end-0 bottom-0 pe-3 pb-2">
+                              <Basket2 onClick={() => delReview(el._id)} />
+                            </span>
+                          )}
+                        </Card.Body>
+                      </Card>
+                    </Col>
+                  ))
+                  .slice(5, data.reviews.length)}
+              </Row>
             )}
-            {/* {!hideForm && (
-              <Col xs={12} className="mt-5">
-                <h3>Новый отзыв</h3>
-                <Form onSubmit={addReview}>
-                  <Form.Group className="mb-3">
-                    <Form.Label htmlFor="rating">Рейтинг (0-5)</Form.Label>
-                    <Form.Control
-                      type="number"
-                      min={1}
-                      max={5}
-                      step={1}
-                      id="rating"
-                      value={revRating}
-                      onChange={(e) => setRevRating(+e.target.value)}
-                    />
-                  </Form.Group>
-                  <Form.Group className="mb-3">
-                    <Form.Label htmlFor="text">Комментарий:</Form.Label>
-                    <Form.Control
-                      as="textarea"
-                      type="text"
-                      id="text"
-                      value={revText}
-                      rows={3}
-                      onChange={(e) => setRevText(e.target.value)}
-                    />
-                  </Form.Group>
-                  <Button
-                    type="reset"
-                    className="me-2"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setRevText("");
-                      setRevRating(0);
-                      setHideForm(true);
-                    }}
-                  >
-                    Отмена
-                  </Button>
-                  <Button type="submit">Добавить</Button>
-                </Form>
-              </Col>
-            )} */}
             <Col className="pt-3 pb-3">
               <Button
                 variant="outline-secondary"
                 className="fs-6 rounded-pill pe-4 ps-4 w-100"
+                onClick={() => {
+                  setHideReview(false);
+                  return false;
+                }}
               >
                 <span>Все отзывы</span> <CaretRight />
               </Button>
