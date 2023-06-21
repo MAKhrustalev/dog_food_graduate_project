@@ -1,7 +1,7 @@
-<h1>Project Name: DOG FOOD - on-line shopping for pet owners</h1>
-<h1>Project purpose: graduate project for Frontend-developer course of SberUniversity</h1>
+<h3>Project Name: DOG FOOD - on-line shopping for pet owners</h3>
+<h3>Project purpose: graduate project for Frontend-developer course of SberUniversity</h3>
 
-<h1>Project Stack:</h1>
+<h3>Project Stack:</h3>
 <p>JavaScript</p>
 <p>HTML</p>
 <p>CSS</p>
@@ -25,7 +25,6 @@
 
 - 📫 How to reach me **maxim.khrustalev@gmail.com**
 
-<h3 align="left">Connect with me:</h3>
 <p align="left">
 </p>
 
