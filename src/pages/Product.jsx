@@ -63,15 +63,26 @@ const Product = ({ discount, likes, price, name, pictures, tags, _id }) => {
   const [revRating, setRevRating] = useState(0);
   const [hideForm, setHideForm] = useState(true);
   const navigate = useNavigate();
-  const [isLike, setIsLike] = useState(likes?.includes(userId));
 
-  const [likeFlag, setLikeFlag] = useState(false);
   const [hideReview, setHideReview] = useState(true);
-
-  const likeHandler = () => {
+  const [isLike, setIsLike] = useState(likes?.includes(userId));
+  const [likeFlag, setLikeFlag] = useState(false);
+  // Добавление лайков
+  const likeHandler = (id) => {
     setIsLike(!isLike);
     setLikeFlag(true);
   };
+  useEffect(() => {
+    if (likeFlag) {
+      api.setLike(id, isLike).then((data) => {
+        setLikeFlag(false);
+
+        api.getProducts().then((newData) => {
+          setBaseData(newData.products);
+        });
+      });
+    }
+  }, [isLike, id, api, likeFlag, setBaseData]); // deps '_id', 'api', 'likeFlag', 'setBaseData' добавил, тк прога ругалась
 
   // Добавление звездочек рейтинга (списал)
   let rate = getRate(data);
@@ -119,7 +130,6 @@ const Product = ({ discount, likes, price, name, pictures, tags, _id }) => {
   // обработчик нажатия на кнопку изменения товара !!!!!!!!!!!!!!!
   const updHandler = () => {
     api.updSingleProduct(id).then((data) => {
-      console.log(data);
       navigate(`/upd/product/${data._id}`);
     });
   };
@@ -252,36 +262,38 @@ const Product = ({ discount, likes, price, name, pictures, tags, _id }) => {
               </Col>
               <Row className=" ms-1 me-1">
                 <Col xs={6} className="text-center">
-                  <ButtonGroup
-                    md={5}
-                    aria-label="Basic example"
-                    className="w-75"
-                    display-none={!inBasket}
-                  >
-                    <Button
-                      variant="warning"
-                      disabled={
-                        Array.isArray(basket) &&
-                        basket.find((basketEl) => basketEl.id === id)?.cnt === 1
-                      }
-                      onClick={() => dec(id)}
+                  {inBasket && (
+                    <ButtonGroup
+                      md={5}
+                      aria-label="Basic example"
+                      className="w-75"
                     >
-                      -
-                    </Button>
-                    <Button variant="light" disabled>
-                      {/* Max - Не понял как вы определяете количество для рендеринга. Нужно искать по корзине соответствующий товар и выводить его cnt */}
-                      {Array.isArray(basket)
-                        ? basket.find((basketEl) => basketEl.id === id)?.cnt ??
-                          0
-                        : 0}
-                    </Button>
-                    <Button variant="warning" onClick={() => inc(id)}>
-                      +
-                    </Button>
-                    {/* <Button variant="outline-secondary">-</Button> */}
-                    {/* <Button variant="outline-secondary">0</Button>
-                          <Button variant="outline-secondary">+</Button> */}
-                  </ButtonGroup>
+                      <Button
+                        variant="warning"
+                        disabled={
+                          Array.isArray(basket) &&
+                          basket.find((basketEl) => basketEl.id === id)?.cnt ===
+                            1
+                        }
+                        onClick={() => dec(id)}
+                      >
+                        -
+                      </Button>
+                      <Button variant="light" disabled>
+                        {/* Max - Не понял как вы определяете количество для рендеринга. Нужно искать по корзине соответствующий товар и выводить его cnt */}
+                        {Array.isArray(basket)
+                          ? basket.find((basketEl) => basketEl.id === id)
+                              ?.cnt ?? 0
+                          : 0}
+                      </Button>
+                      <Button variant="warning" onClick={() => inc(id)}>
+                        +
+                      </Button>
+                      {/* <Button variant="outline-secondary">-</Button> */}
+                      {/* <Button variant="outline-secondary">0</Button>
+                    <Button variant="outline-secondary">+</Button> */}
+                    </ButtonGroup>
+                  )}
                 </Col>
                 {/* ) */}
                 {/* } */}

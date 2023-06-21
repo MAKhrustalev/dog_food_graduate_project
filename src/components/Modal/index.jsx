@@ -36,7 +36,6 @@ const Modal = ({ isActive, setIsActive, setUser }) => {
       body.name = name;
       body.group = "group-12";
     }
-    console.log(body);
 
     // `https://api.react-learning.ru/signup`
     // {
@@ -55,7 +54,7 @@ const Modal = ({ isActive, setIsActive, setUser }) => {
     // })
     // const data = await res.json();
     const data = await (isReg ? api.register(body) : api.auth(body));
-    console.log(data);
+
     if (isReg) {
       if (data?._id) {
         setIsReg(false);
@@ -90,9 +89,9 @@ const Modal = ({ isActive, setIsActive, setUser }) => {
   };
 
   return (
-    <div className="modal-wrapper" style={st}>
+    <div className="modal__wrapper" style={st}>
       <div className="modal">
-        <button className="modal-close" onClick={(e) => setIsActive(false)}>
+        <button className="modal__close" onClick={(e) => setIsActive(false)}>
           <XOctagon />
         </button>
         <h3>{isReg ? "Регистрация" : "Вход"}</h3>
@@ -125,12 +124,12 @@ const Modal = ({ isActive, setIsActive, setUser }) => {
               onChange={(e) => setPwd2(e.target.value)}
             />
           )}
-          <div className="modal-btns">
+          <div className="modal__btns">
             {/* Если у меня форма регистрации и пароли не равны или не введен пароль - кнопка не активна */}
             <button type="submit" disabled={isReg && (!pwd || pwd !== pwd2)}>
               {isReg ? "Зарегистрироваться" : "Войти"}
             </button>
-            <a className="modal-link" onClick={changeForm}>
+            <a className="modal__link" onClick={changeForm}>
               {isReg ? "Войти" : "Зарегистрироваться"}
             </a>
           </div>

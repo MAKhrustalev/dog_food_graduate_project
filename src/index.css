@@ -32,7 +32,7 @@ p {
   gap: 20px;
   align-content: flex-start;
 }
-.search-result {
+.search__result {
   grid-column-end: span 3;
   /* margin: 0; */
   color: grey;
@@ -51,14 +51,14 @@ p {
   /* justify-content: center; */
   align-items: center;
 }
-.info-link {
+.info__link {
   display: flex;
   align-items: center;
   cursor: pointer;
   text-shadow: 0 0 1px gold;
   user-select: none;
 }
-.info-link:hover {
+.info__link:hover {
   text-shadow: 0 0 7px gold;
 }
 .top {

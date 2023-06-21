@@ -74,7 +74,7 @@ const App = () => {
 
   useEffect(() => {
     setApi(new Api(token)); // передаем экземпляр класса token если он есть
-    console.log("token", token);
+    // console.log("token", token);
     // if (token) {
     //     fetch("https://api.react-learning.ru/products", {
     //         headers: {
@@ -92,7 +92,6 @@ const App = () => {
   useEffect(() => {
     if (token) {
       api.getProducts().then((data) => {
-        console.log(data);
         setBaseData(data.products);
       });
     } else {

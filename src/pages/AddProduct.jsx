@@ -77,10 +77,8 @@ const AddProduct = () => {
       pictures: link,
       tags: tagWord && !tags.includes(tagWord) ? [...tags, tagWord] : tags,
     };
-    console.log(body);
     // добавляем api добавления нового товара и обновления базы товаров
     api.addProduct(body).then((data) => {
-      console.log(data);
       if (!data.err && !data.error) {
         clearForm();
         // перенаправление на страницу с новым товар

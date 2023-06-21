@@ -25,6 +25,13 @@ const Home = ({ user, setActive, goods, setBaseData, userId }) => {
           Всегда свежие лакомства ручной <br />
           работы с доставкой по России и миру
         </p>
+        {!user && (
+          <>
+            <span className="text-danger" onClick={() => setActive(true)}>
+              Авторизуйтесь, чтобы получить доступ к сайту
+            </span>
+          </>
+        )}
         {user ? (
           <button>
             {user && (
@@ -49,8 +56,15 @@ const Home = ({ user, setActive, goods, setBaseData, userId }) => {
           <Col className="col-12">
             <Ads />
           </Col>
-          <Col className="col-12">{user ? <h3>Хиты</h3> : ""}</Col>
-          <Slider desktop={3} mobile={2} />
+          {user ? (
+            <Col className="col-12">
+              <h3>Хиты</h3>
+              <Slider desktop={3} mobile={2} />
+            </Col>
+          ) : (
+            ""
+          )}
+
           {/* {goods.slice(0, 4).map((pro, i) => (
             <Col key={i} xs={12} sm={6} md={6} lg={3}>
               <BsCard
@@ -67,8 +81,15 @@ const Home = ({ user, setActive, goods, setBaseData, userId }) => {
           <Col sm={12} md={6}>
             <AdsSet2 />
           </Col>
-          <Col className="col-12">{user ? <h3>Лакомства</h3> : ""}</Col>
-          <Slider desktop={3} mobile={2} />
+          {user ? (
+            <Col className="col-12">
+              <h3>Лакомства</h3>
+              <Slider desktop={3} mobile={2} />
+            </Col>
+          ) : (
+            ""
+          )}
+
           {/* {goods.slice(5, 9).map((pro, i) => (
             <Col key={i} xs={12} sm={6} md={6} lg={3}>
               <BsCard
@@ -97,14 +118,6 @@ const Home = ({ user, setActive, goods, setBaseData, userId }) => {
         <Ads />
         <Ads />
       </div> */}
-      {!user && (
-        <>
-          <span className="info-link" onClick={() => setActive(true)}>
-            Авторизуйтесь
-          </span>
-          , чтобы получить доступ к сайту
-        </>
-      )}
     </div>
   );
 };

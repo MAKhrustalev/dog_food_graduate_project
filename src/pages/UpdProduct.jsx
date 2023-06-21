@@ -20,6 +20,7 @@ import Ctx from "../ctx";
 
 const UpdProduct = () => {
   const { id } = useParams();
+
   const navigate = useNavigate();
   const { api, setBaseData } = useContext(Ctx); // инициализация контекста
   const [name, setName] = useState("");
@@ -27,7 +28,6 @@ const UpdProduct = () => {
   const [link, setLink] = useState(""); // pictures
 
   const [price, setPrice] = useState("");
-  // const [price, setPrice] = useContext(Ctx);
 
   const [cnt, setCnt] = useState(""); // stock
   const [description, setDescription] = useState("");
@@ -80,17 +80,14 @@ const UpdProduct = () => {
       pictures: link,
       tags: tagWord && !tags.includes(tagWord) ? [...tags, tagWord] : tags,
     };
-    console.log("body", body.price);
 
-    // добавляем api добавления нового товара и обновления базы товаров
+    // добавляем api обновления товара и обновления базы товаров
     api.updSingleProduct(id).then((data) => {
-      console.log(data);
       if (!data.err && !data.error) {
         // setPrice(body.price);
         // setPrice((prev) => [...prev, body.price]);
         localStorage.setItem("id", JSON.stringify(body));
         localStorage.setItem("price", price);
-        console.log(price);
         // перенаправление на страницу с изменяемым товар
         navigate(`/product/${data._id}`);
         // navigate(`/product/${data.id}`);
@@ -105,7 +102,6 @@ const UpdProduct = () => {
       }
     });
   };
-  console.log(price);
   // const [id, setID] = useState(null);
 
   return (
@@ -145,9 +141,9 @@ const UpdProduct = () => {
                   id="pro-price"
                   type="number"
                   value={price}
-                  step="10"
-                  min="9"
-                  max="29999"
+                  // step="10"
+                  // min="9"
+                  // max="29999"
                   onChange={(e) => {
                     setPrice(e.target.value);
                   }}

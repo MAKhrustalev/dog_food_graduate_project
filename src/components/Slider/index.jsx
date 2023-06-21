@@ -14,7 +14,8 @@ const Slider = ({ desktop = 4, mobile = 1 }) => {
   useEffect(() => {
     if (window.innerWidth <= 768) {
       setCnt(mobile);
-    }
+    } else setCnt(desktop);
+    // Max - В компоненте Slider вы навешиваете слушатель на window. В таких кейсах необходимо удалять слушатель при размонитровании компонента, иначе он будет работать все время и сохранятся ссылки на стейт и так далее.
     window.addEventListener("resize", function () {
       if (window.innerWidth <= 768) {
         setCnt(mobile);
@@ -25,7 +26,6 @@ const Slider = ({ desktop = 4, mobile = 1 }) => {
   }, []);
 
   useEffect(() => {
-    console.log(baseData);
     if (baseData.length) {
       /*
                // reduce
@@ -61,9 +61,7 @@ const Slider = ({ desktop = 4, mobile = 1 }) => {
     }
   }, [baseData, cnt]);
 
-  useEffect(() => {
-    console.log(gds);
-  }, [gds]);
+  useEffect(() => {}, [gds]);
 
   return (
     <Container style={{ gridTemplateColumns: "1fr" }}>

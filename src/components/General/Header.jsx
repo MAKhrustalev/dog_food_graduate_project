@@ -31,7 +31,7 @@ const Header = ({ user, searchArr, setGoods, setModalOpen }) => {
   return (
     <header>
       <Logo />
-      <div className="search-block">
+      <div className="search__block">
         <Search
           data={searchArr}
           setGoods={setGoods}

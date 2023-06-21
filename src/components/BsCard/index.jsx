@@ -23,7 +23,6 @@ const BsCard = ({ discount, likes, name, pictures, price, tags, _id }) => {
 
         // setBaseData((old) => old.map(el => el._id === data._id ? data : el))
         api.getProducts().then((newData) => {
-          console.log(newData);
           setBaseData(newData.products);
         });
       });
@@ -63,7 +62,7 @@ const BsCard = ({ discount, likes, name, pictures, price, tags, _id }) => {
   return (
     <Card className="pt-3 h-100" id={"pro_" + _id}>
       {userId && (
-        <span className="card-like" onClick={likeHandler}>
+        <span className="card__like" onClick={likeHandler}>
           {isLike ? <SuitHeartFill /> : <SuitHeart />}
         </span>
       )}
@@ -89,7 +88,7 @@ const BsCard = ({ discount, likes, name, pictures, price, tags, _id }) => {
           {inBasket ? "В корзине" : "Купить"}
         </Button>
       </Card.Body>
-      <Link to={`/product/${_id}`} className="card-link"></Link>
+      <Link to={`/product/${_id}`} className="card__link"></Link>
     </Card>
   );
 };

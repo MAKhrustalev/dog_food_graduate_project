@@ -60,9 +60,9 @@ const Card = ({ discount, likes, name, pictures, price, tags, _id, user }) => {
   };
   // id не должен начинаться с цифры (правило для css)
   return (
-    <div className="card-lite" id={"pro_" + _id}>
+    <div className="card__lite" id={"pro_" + _id}>
       {likes && (
-        <span className="card-like" onClick={likeHandler}>
+        <span className="card__like" onClick={likeHandler}>
           {isLike ? <SuitHeartFill /> : <SuitHeart />}
         </span>
       )}
@@ -72,7 +72,7 @@ const Card = ({ discount, likes, name, pictures, price, tags, _id, user }) => {
       <button disabled={inBasket} onClick={addToBasket}>
         Купить
       </button>
-      <Link to={`/products/${_id}`} className="card-link"></Link>
+      <Link to={`/products/${_id}`} className="card__link"></Link>
     </div>
   );
 };
