@@ -37,22 +37,6 @@ const Modal = ({ isActive, setIsActive, setUser }) => {
       body.group = "group-12";
     }
 
-    // `https://api.react-learning.ru/signup`
-    // {
-    // 	group: "group-12",
-    // 	password: "---",
-    // 	email: "ваша почта"
-    // }
-
-    // const path = `https://api.react-learning.ru/${isReg ? "signup" : "signin"}`;
-    // const res = await fetch(path, {
-    // 	method: "POST",
-    // 	headers: {
-    // 		"Content-Type": "application/json"
-    // 	},
-    // 	body: JSON.stringify(body)
-    // })
-    // const data = await res.json();
     const data = await (isReg ? api.register(body) : api.auth(body));
 
     if (isReg) {
@@ -71,17 +55,6 @@ const Modal = ({ isActive, setIsActive, setUser }) => {
         setIsActive(false);
       }
     }
-
-    // v2
-    // fetch(path, {
-    // 	method: "POST",
-    // 	headers: {
-    // 		"Content-Type": "application/json"
-    // 	},
-    // 	body: JSON.stringify(body)
-    // })
-    // 	.then(res => res.json())
-    // 	.then(data => console.log(data))
   };
 
   const st = {
@@ -125,7 +98,6 @@ const Modal = ({ isActive, setIsActive, setUser }) => {
             />
           )}
           <div className="modal__btns">
-            {/* Если у меня форма регистрации и пароли не равны или не введен пароль - кнопка не активна */}
             <button type="submit" disabled={isReg && (!pwd || pwd !== pwd2)}>
               {isReg ? "Зарегистрироваться" : "Войти"}
             </button>

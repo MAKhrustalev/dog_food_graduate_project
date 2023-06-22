@@ -1,6 +1,6 @@
 import { Container, Row, Col } from "react-bootstrap";
-import { Link } from "react-router-dom"; // связь с линками
-import { Journals } from "react-bootstrap-icons"; // импорт иконки bootstrap
+import { Link } from "react-router-dom";
+import { Journals } from "react-bootstrap-icons";
 import Ads from "../components/Ads/Ads";
 import {
   AdsSet1,
@@ -9,9 +9,6 @@ import {
   AdsSet4,
 } from "../components/AdsSet/AdsSet";
 import Slider from "../components/Slider";
-
-// Компонент домашней страницы - если есть user, то страница отрисовывается
-// - открывается ссылка на каталог. Если нет пользователя - предупреджение о авторизаци
 
 const Home = ({ user, setActive, goods, setBaseData, userId }) => {
   return (
@@ -44,12 +41,6 @@ const Home = ({ user, setActive, goods, setBaseData, userId }) => {
         ) : (
           ""
         )}
-        {/* {user && (
-          <Link to="/catalog" className="info-link">
-            <Journals style={{ marginRight: "10px" }} />
-            Каталог товаров +
-          </Link>
-        )} */}
       </div>
       <Container className="main d-block">
         <Row className="gy-2">
@@ -64,17 +55,6 @@ const Home = ({ user, setActive, goods, setBaseData, userId }) => {
           ) : (
             ""
           )}
-
-          {/* {goods.slice(0, 4).map((pro, i) => (
-            <Col key={i} xs={12} sm={6} md={6} lg={3}>
-              <BsCard
-                img={pro.pictures}
-                {...pro}
-                setBaseData={setBaseData}
-                user={userId}
-              />
-            </Col>
-          ))} */}
           <Col sm={12} md={6}>
             <AdsSet1 />
           </Col>
@@ -90,16 +70,6 @@ const Home = ({ user, setActive, goods, setBaseData, userId }) => {
             ""
           )}
 
-          {/* {goods.slice(5, 9).map((pro, i) => (
-            <Col key={i} xs={12} sm={6} md={6} lg={3}>
-              <BsCard
-                img={pro.pictures}
-                {...pro}
-                setBaseData={setBaseData}
-                user={userId}
-              />
-            </Col>
-          ))} */}
           <Col sm={12} md={6}>
             <AdsSet3 />
           </Col>
@@ -109,15 +79,8 @@ const Home = ({ user, setActive, goods, setBaseData, userId }) => {
           <Col className="col-12">
             <Ads />
           </Col>
-
-          {/*Сколько карточек в ряд будет в слайдере*/}
         </Row>
       </Container>
-      {/* <div className="main">
-        Main
-        <Ads />
-        <Ads />
-      </div> */}
     </div>
   );
 };

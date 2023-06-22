@@ -21,40 +21,26 @@ span {
 .ad__mini__text {
   height: 100%;
   width: 50%;
-  /* padding: 10px; */
 }
 .ad__mini__slogan {
   color: beige;
   margin: 30px 20px;
-  /* margin-left: 50px;
-    margin-top: 50px;
-    margin-right: 10px; */
 }
-
 .ad__mini__picture {
-  /* background-color: #fff; */
-  /* height: 100%; */
   width: 50%;
   position: relative;
-
-  /* margin-left: 75px; */
 }
 .ad__mini__img {
   position: absolute;
   z-index: 2;
   height: 100%;
   margin-right: 0;
-
-  /* margin-top: -50px; */
 }
 .ad__mini__bg {
   position: absolute;
-  /* background-color: goldenrod; */
-
   height: 150%;
   width: 150%;
   border-radius: 50%;
-
   margin-top: -5%;
   margin-right: -25%;
   z-index: 1;

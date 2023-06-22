@@ -4,33 +4,17 @@ import Ctx from "../../ctx";
 import "./style.css";
 
 const Search = () => {
-  // так подключается контекст
   const { setSearchResult, baseData, setGoods } = useContext(Ctx);
-
   const navigate = useNavigate();
   const [text, setText] = useState("");
   const [num, setNum] = useState(0);
-  // в переменной text находится пустая строка - изменяет текст поиска
-  const changeValue = (e) => {
-    navigate("/catalog"); // использование поиска на любой странице перенаправляет в Каталог
-    let val = e.target.value.toLowerCase();
-    // console.log(e.target.value);
-    setText(val);
-    // setNum(num + 1); // num++ => 0 => 0+1
-    /*
-			При вводе текста в строку поиска, мы сопоставляем эту строку с данными из массива data
-			В консоли выведем новый масивв с подходящими названиями
-		*/
-    // setNum(data.filter(el => el.name.toLowerCase().includes(
-    // 	e.target.value.toLowerCase()
-    // )).length);
-    // setNum(data.filter(el => el.name.toLowerCase().includes(val)).length);
-  };
-  // const changeText = () => {
-  //   console.log("Click");
-  //   setText("Привет!");
-  // };
 
+  const changeValue = (e) => {
+    navigate("/catalog");
+    let val = e.target.value.toLowerCase();
+
+    setText(val);
+  };
   useEffect(() => {
     let str = "";
     if (num && text) {
@@ -55,31 +39,8 @@ const Search = () => {
         value={text}
         onChange={changeValue}
       />
-      {/*<button onClick={changeText}>Тык {num} раз</button>*/}
-      {/*{text && <p>По запросу {text} найдено {num} товаров</p>}*/}
     </>
   );
 };
 
 export default Search;
-
-/*
-	Жизненный цикл
-	Mount - монтаж (отрисовка приложения)
-	componentWillMount
-	componentDidMount
-
-	componentWillUpdate
-	componentDidUpdate
-
-	componentWillUnmount
-	componentDidUnmount
-*/
-
-/*
-	Без React:
-	1) Создаем html-контент
-	2) Взять нужные теги
-	3) Повесить на input событие
-	4) По событию добавлять в DOM нужный контент
-*/

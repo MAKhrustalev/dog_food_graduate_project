@@ -1,5 +1,3 @@
-// import { useState } from "react";
-
 export const getRate = (data) => {
   if (data.reviews) {
     const rate = data.reviews.reduce((avg, review, i, arr) => {

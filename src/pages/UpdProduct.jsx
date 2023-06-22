@@ -1,18 +1,3 @@
-/*
-    В БД хранятся данные определенных типов
-    Необязательные параметры помечены вопросительным знаком
-    {
-        name: string
-        pictures: string (ссылка)
-        price: number
-        stock?: number (количество на складе)
-        tags?: array of string (пометки новинок, скидок, популярных товаров)
-        description?: string => "Скоро здесь будет текст..."
-        discount?: number => 0
-        wight?: string (вес - не 100, а "100 г")
-    }
-*/
-
 import { useState, useContext, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
@@ -22,16 +7,16 @@ const UpdProduct = () => {
   const { id } = useParams();
 
   const navigate = useNavigate();
-  const { api, setBaseData } = useContext(Ctx); // инициализация контекста
+  const { api, setBaseData } = useContext(Ctx);
   const [name, setName] = useState("");
-  const [link, setLink] = useState(""); // pictures
+  const [link, setLink] = useState("");
   const [price, setPrice] = useState("");
-  const [cnt, setCnt] = useState(""); // stock
+  const [cnt, setCnt] = useState("");
   const [description, setDescription] = useState("");
   const [discount, setDiscount] = useState(0);
   const [wight, setWight] = useState("0 г");
-  const [tagWord, setTagWord] = useState(""); // слово для массива с тегами
-  const [tags, setTags] = useState(["df"]); // массив с тегами. По тегу df мы будет сортировать ТОЛЬКО наши товары и только с собачьими няшками (сами придумаем как)
+  const [tagWord, setTagWord] = useState("");
+  const [tags, setTags] = useState(["df"]);
 
   const tagsHandler = (e) => {
     const val = e.target.value;
@@ -47,21 +32,8 @@ const UpdProduct = () => {
       setTagWord(val);
     }
   };
-
-  // useEffect(() => {
-  //   setName(localStorage.getItem("name"));
-  //   setLink(localStorage.getItem("link"));
-  //   setPrice(localStorage.getItem("price"));
-  //   setCnt(localStorage.getItem("cnt"));
-  //   setWight(localStorage.getItem("wight"));
-  //   setDiscount(localStorage.getItem("discount"));
-  //   setDescription(localStorage.getItem("description"));
-  //   // setTags(localStorage.getItem("tagWord"));
-  // }, []);
-
   const delTag = (e) => {
     const val = e.target.innerText;
-    // Из спсика с тегами возвращаем только те, которые не соответствуют нажатому
     setTags((prev) => prev.filter((tg) => tg !== val));
   };
   const formHandler = (e) => {
@@ -79,30 +51,15 @@ const UpdProduct = () => {
       tags: tagWord && !tags.includes(tagWord) ? [...tags, tagWord] : tags,
     };
 
-    // добавляем api обновления товара и обновления базы товаров
-
     api.updSingleProduct(id).then((data) => {
       if (!data.err && !data.error) {
         localStorage.setItem("price", body.price);
-        // const price = body.price;
-        // const data = {
-        //   price: localStorage.setItem("price", body.price),
-        // };
-        // перенаправление на страницу с изменяемым товар
-
-        // navigate(`/product/${data.id}`);
-
-        // вариант1 - обновить товар в каталог на стороне клиента
         setBaseData((prev) => [...prev, body]);
         console.log(price);
         navigate(`/product/${data._id}`);
-        // вариант2 - снова стянуть данные с сервера с доп соединением с базой
-        //   api.getProducts().then((data) => setBaseData(data.products));
       }
     });
   };
-
-  // const [id, setID] = useState(null);
 
   return (
     <Container style={{ gridTemplateColumns: "auto" }}>
@@ -141,9 +98,6 @@ const UpdProduct = () => {
                   id="pro-price"
                   type="number"
                   value={price}
-                  // step="10"
-                  // min="9"
-                  // max="29999"
                   onChange={(e) => {
                     setPrice(e.target.value);
                   }}

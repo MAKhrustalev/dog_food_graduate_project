@@ -1,4 +1,3 @@
-// Сюда приходит старый текст из ЛК пользователя, тут он обновляется
 import { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { PencilSquare, XSquare, CheckSquare } from "react-bootstrap-icons";

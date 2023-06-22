@@ -29,9 +29,6 @@ import {
 import { getEnding, getRate } from "../utilities/utilities";
 
 import Ctx from "../ctx";
-// Статичные константы (например tableInfo) выносите за компонент, они при каждом рендере пересоздаются,
-//  а старые удаляются из памяти. В целом это ненужные действия. Хороший пример в footer.jsx,
-//  в этом файле у вас константа вынесена за компонент.
 const tableInfo = [
   {
     name: "wight",
@@ -67,7 +64,7 @@ const Product = ({ discount, likes, price, name, pictures, tags, _id }) => {
   const [hideReview, setHideReview] = useState(true);
   const [isLike, setIsLike] = useState(likes?.includes(userId));
   const [likeFlag, setLikeFlag] = useState(false);
-  // Добавление лайков
+
   const likeHandler = (id) => {
     setIsLike(!isLike);
     setLikeFlag(true);
@@ -82,9 +79,8 @@ const Product = ({ discount, likes, price, name, pictures, tags, _id }) => {
         });
       });
     }
-  }, [isLike, id, api, likeFlag, setBaseData]); // deps '_id', 'api', 'likeFlag', 'setBaseData' добавил, тк прога ругалась
+  }, [isLike, id, api, likeFlag, setBaseData]);
 
-  // Добавление звездочек рейтинга (списал)
   let rate = getRate(data);
   const stars = [];
   for (let i = 0; i < 5; i++) {
@@ -113,35 +109,34 @@ const Product = ({ discount, likes, price, name, pictures, tags, _id }) => {
       setData(d);
     });
   };
-  // Из за этой же ошибки у вас isLike стейт определяется не правильно. Нужно обновить стейт, как получите продукт.
+
   useEffect(() => {
     api.getSingleProduct(id).then((serverData) => {
       setData(serverData);
       setIsLike(serverData.likes?.includes(userId));
     });
   }, []);
-  // обработчик нажатия на кнопку удаления товара
+
   const delHandler = () => {
     api.delSingleProduct(id).then((data) => {
       setBaseData((prev) => prev.filter((el) => el._id !== id));
       navigate("/catalog");
     });
   };
-  // обработчик нажатия на кнопку изменения товара !!!!!!!!!!!!!!!
+
   const updHandler = () => {
     api.updSingleProduct(id).then((data) => {
       navigate(`/upd/product/${data._id}`);
     });
   };
 
-  // Добавить в корзину
   const [cnt, setCnt] = useState(0);
-  const inBasket = basket.filter((el) => id === el.id).length > 0; // Переменная inBasket такая же ошибка. Используете _id(из пропсов), но такой переменной нет. Берем просто id из params или data._id
-  // Функция addToBasket. Используя setBasket вы кладете в стейт некорректные данные. Поэтому у вас они не бьются потом с каталогом. Данные для id, price и discount нужно брать из стейта data(вы берете из пропсов, но если посмотреть в App компонент, то увидим что вы туда ничего не пробрасываете).
+  const inBasket = basket.filter((el) => id === el.id).length > 0;
+
   const addToBasket = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    // Нет проверки на то, что товар уже есть в корзине и нужно увеличить его кол-во, как на стр одного товара
+
     setBasket((prev) => [
       ...prev,
       {
@@ -154,7 +149,6 @@ const Product = ({ discount, likes, price, name, pictures, tags, _id }) => {
     ]);
   };
 
-  // Три кнопки изменения кол-ва товара в корзине (учеличить, уменьшить, удалить)
   const inc = (id) => {
     setBasket((prev) =>
       prev.map((el) => {
@@ -175,7 +169,7 @@ const Product = ({ discount, likes, price, name, pictures, tags, _id }) => {
       })
     );
   };
-  // функция del такая же ошибка. Меняем _id на id или data._id
+
   const del = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -280,7 +274,6 @@ const Product = ({ discount, likes, price, name, pictures, tags, _id }) => {
                         -
                       </Button>
                       <Button variant="light" disabled>
-                        {/* Max - Не понял как вы определяете количество для рендеринга. Нужно искать по корзине соответствующий товар и выводить его cnt */}
                         {Array.isArray(basket)
                           ? basket.find((basketEl) => basketEl.id === id)
                               ?.cnt ?? 0
@@ -289,20 +282,15 @@ const Product = ({ discount, likes, price, name, pictures, tags, _id }) => {
                       <Button variant="warning" onClick={() => inc(id)}>
                         +
                       </Button>
-                      {/* <Button variant="outline-secondary">-</Button> */}
-                      {/* <Button variant="outline-secondary">0</Button>
-                    <Button variant="outline-secondary">+</Button> */}
                     </ButtonGroup>
                   )}
                 </Col>
-                {/* ) */}
-                {/* } */}
+
                 <Col xs={6} className="text-center">
                   <Button
                     disabled={inBasket}
                     onClick={addToBasket}
                     variant="warning"
-                    // active
                     className="fw-bold rounded-pill pe-4 ps-4 w-100"
                     style={{ cursor: "pointer" }}
                   >
@@ -317,7 +305,6 @@ const Product = ({ discount, likes, price, name, pictures, tags, _id }) => {
                 className="ms-1 me-1 mb-3 mt-3 text-black-50"
               >
                 <span style={{ cursor: "pointer" }} onClick={del}>
-                  {/* Проверить есть ли товар в корзине */}
                   {inBasket ? <Trash3 /> : ""}{" "}
                   {inBasket ? "Удалить из корзины" : ""}
                 </span>
@@ -488,7 +475,7 @@ const Product = ({ discount, likes, price, name, pictures, tags, _id }) => {
                             <Card.Text className="fs-6 text-secondary">
                               {el.text}
                             </Card.Text>
-                            {/* Корзина удаления отзывов, добавленных мной */}
+
                             {el.author._id === userId && (
                               <span className="text-danger position-absolute end-0 bottom-0 pe-3 pb-2">
                                 <Basket2 onClick={() => delReview(el._id)} />
@@ -546,7 +533,7 @@ const Product = ({ discount, likes, price, name, pictures, tags, _id }) => {
                           <Card.Text className="fs-6 text-secondary">
                             {el.text}
                           </Card.Text>
-                          {/* Корзина удаления отзывов, добавленных мной */}
+
                           {el.author._id === userId && (
                             <span className="text-danger position-absolute end-0 bottom-0 pe-3 pb-2">
                               <Basket2 onClick={() => delReview(el._id)} />
@@ -585,7 +572,6 @@ const Product = ({ discount, likes, price, name, pictures, tags, _id }) => {
         )}
       </Row>
     </Container>
-    // </Ctx.Provider>
   );
 };
 

@@ -1,4 +1,3 @@
-// Созданм личный кабинет пользователя
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button, Container, Row, Col, Figure } from "react-bootstrap";
@@ -82,13 +81,11 @@ const Profile = ({ setUser }) => {
             </>
           )}
         </Row>
-        {/* <Link to="/add/product">Добавить товар</Link> */}
         <Button variant="warning" as={Link} to="/add/product">
           Добавить товар
         </Button>
         <br />
         <button onClick={logOut}>Выйти из аккаунта</button>
-        {/* Добавить мои товары на страницу ЛК */}
         <Row>
           <Col xs={12}>
             <h3>Мои товары</h3>

@@ -11,19 +11,17 @@ import { Trash3, EmojiFrown } from "react-bootstrap-icons";
 import Ctx from "../ctx";
 import { Link } from "react-router-dom";
 
-// создаем контекст
-
 const Basket = ({}) => {
   const { basket, setBasket, baseData } = useContext(Ctx);
   const ids = basket.map((b) => b.id);
-  const filteredData = baseData.filter((el) => ids.includes(el._id)); //фильтруем массив с данными, ищем включенные в корзину
-  /* Посчитать сумму всех товаров с учетом их количества */
+  const filteredData = baseData.filter((el) => ids.includes(el._id));
+
   const sum = basket.reduce((acc, el) => acc + el.price * el.cnt, 0);
-  /* Посчитать сумму всех товаров с учетом их количества и скидки*/
+
   const sumDiscount = basket.reduce((acc, el) => {
     return acc + el.price * el.cnt * ((100 - el.discount) / 100);
   }, 0);
-  // увеличение количества товара в корзине на 1 шт
+
   const inc = (id) => {
     setBasket((prev) =>
       prev.map((el) => {
@@ -34,7 +32,7 @@ const Basket = ({}) => {
       })
     );
   };
-  // уменьшение количества товара в корзине на 1 шт
+
   const dec = (id) => {
     setBasket((prev) =>
       prev.map((el) => {
@@ -45,11 +43,11 @@ const Basket = ({}) => {
       })
     );
   };
-  // удаление товара из корзины
+
   const del = (id) => {
     setBasket((prev) => prev.filter((el) => el.id !== id));
   };
-  // Очистить корзину
+
   const clearBasket = (id) => {
     setBasket((prev) => []);
   };
@@ -87,7 +85,7 @@ const Basket = ({}) => {
                       <Button variant="light" disabled>
                         {el.cnt}
                       </Button>
-                      {/* При заказе товара, следует ограничить число в соответствии с кол-вом на складе */}
+
                       <Button variant="warning" onClick={() => inc(el.id)}>
                         +
                       </Button>
@@ -120,7 +118,7 @@ const Basket = ({}) => {
                 </tr>
               ))}
             </tbody>
-            {/* строка с суммой по корзине */}
+
             <tfoot>
               <tr>
                 <td colSpan={5} className="text-end text-uppercase">

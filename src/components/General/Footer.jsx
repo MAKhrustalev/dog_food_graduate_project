@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"; // связь с линками
+import { Link } from "react-router-dom";
 import Logo from "./Logo";
 const links = [
   { name: "Каталог", src: "/catalog" },
@@ -24,5 +24,3 @@ const Footer = () => (
 );
 
 export default Footer;
-// Чтобы сделать Single Page Application, все тэги <a href=>
-// заменить на компонент <Link to=> и импортировать  Link

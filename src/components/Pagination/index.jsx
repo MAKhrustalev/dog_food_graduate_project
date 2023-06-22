@@ -1,4 +1,3 @@
-//Создание компонента Pagination на базе bootstrap
 import { Pagination as BsPag } from "react-bootstrap";
 
 const Pagination = ({ hk }) => {
