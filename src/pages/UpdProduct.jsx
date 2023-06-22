@@ -24,11 +24,8 @@ const UpdProduct = () => {
   const navigate = useNavigate();
   const { api, setBaseData } = useContext(Ctx); // инициализация контекста
   const [name, setName] = useState("");
-
   const [link, setLink] = useState(""); // pictures
-
   const [price, setPrice] = useState("");
-
   const [cnt, setCnt] = useState(""); // stock
   const [description, setDescription] = useState("");
   const [discount, setDiscount] = useState(0);
@@ -51,16 +48,16 @@ const UpdProduct = () => {
     }
   };
 
-  useEffect(() => {
-    setName(localStorage.getItem("name"));
-    setLink(localStorage.getItem("link"));
-    setPrice(localStorage.getItem("price"));
-    setCnt(localStorage.getItem("cnt"));
-    setWight(localStorage.getItem("wight"));
-    setDiscount(localStorage.getItem("discount"));
-    setDescription(localStorage.getItem("description"));
-    // setTags(localStorage.getItem("tagWord"));
-  }, []);
+  // useEffect(() => {
+  //   setName(localStorage.getItem("name"));
+  //   setLink(localStorage.getItem("link"));
+  //   setPrice(localStorage.getItem("price"));
+  //   setCnt(localStorage.getItem("cnt"));
+  //   setWight(localStorage.getItem("wight"));
+  //   setDiscount(localStorage.getItem("discount"));
+  //   setDescription(localStorage.getItem("description"));
+  //   // setTags(localStorage.getItem("tagWord"));
+  // }, []);
 
   const delTag = (e) => {
     const val = e.target.innerText;
@@ -72,6 +69,7 @@ const UpdProduct = () => {
     const body = {
       name: name,
       price: price,
+      pictures: link,
       link: link,
       discount: discount,
       cnt: cnt,
@@ -82,26 +80,28 @@ const UpdProduct = () => {
     };
 
     // добавляем api обновления товара и обновления базы товаров
+
     api.updSingleProduct(id).then((data) => {
       if (!data.err && !data.error) {
-        // setPrice(body.price);
-        // setPrice((prev) => [...prev, body.price]);
-        localStorage.setItem("id", JSON.stringify(body));
-        localStorage.setItem("price", price);
+        localStorage.setItem("price", body.price);
+        // const price = body.price;
+        // const data = {
+        //   price: localStorage.setItem("price", body.price),
+        // };
         // перенаправление на страницу с изменяемым товар
-        navigate(`/product/${data._id}`);
+
         // navigate(`/product/${data.id}`);
 
         // вариант1 - обновить товар в каталог на стороне клиента
-        // setBaseData((prev) => [...prev, data]);
-        // console.log(body);
-        // localStorage.setItem("id", JSON.stringify(body));
+        setBaseData((prev) => [...prev, body]);
+        console.log(price);
+        navigate(`/product/${data._id}`);
         // вариант2 - снова стянуть данные с сервера с доп соединением с базой
-        // api.getProducts()
-        //     .then(data => setBaseData(data.products))
+        //   api.getProducts().then((data) => setBaseData(data.products));
       }
     });
   };
+
   // const [id, setID] = useState(null);
 
   return (
@@ -237,9 +237,7 @@ const UpdProduct = () => {
                   ))}
                 </Form.Text>
               </Form.Group>
-              <Button type="submit" onClick={() => api.updSingleProduct}>
-                Изменить товар
-              </Button>
+              <Button type="submit">Изменить товар</Button>
             </Col>
           </Row>
         </Form>

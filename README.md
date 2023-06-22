@@ -2,20 +2,20 @@
 <h3>Project purpose: graduate project for Frontend-developer course of SberUniversity</h3>
 
 <h3>Project Stack:</h3>
-<p>JavaScript</p>
-<p>HTML</p>
-<p>CSS</p>
-<p>react 18.2.0</p>
-<p>bootstrap 5.2.3</p>
-<p>react-bootstrap 2.7.4</p>
-<p>react-bootstrap-icons 1.10.3</p>
-<p>react-dom 18.2.0</p>
-<p>react-router 6.11.0</p>
-<p>react-router-dom 6.11.0</p>
-<p>react-scripts 5.0.1</p>
+<ul>JavaScript</ul>
+<ul>HTML</ul>
+<ul>CSS</ul>
+<ul>react 18.2.0</ul>
+<ul>bootstrap 5.2.3</ul>
+<ul>react-bootstrap 2.7.4</ul>
+<ul>react-bootstrap-icons 1.10.3</ul>
+<ul>react-dom 18.2.0</ul>
+<ul>react-router 6.11.0</ul>
+<ul>react-router-dom 6.11.0</ul>
+<ul>react-scripts 5.0.1</ul>
 
 <h1 align="center">Hi 👋, I'm Max</h1>
-<h3 align="center">A junior frontend developer from Russia</h3>
+<h3 align="center">An experienced FX & IR Trader and a junior Frontend Developer</h3>
 
 <p align="left"> <img src="https://komarev.com/ghpvc/?username=makhrustalev&label=Profile%20views&color=0e75b6&style=flat" alt="makhrustalev" /> </p>
 
