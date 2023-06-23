@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 
 import { Container, Row, Col } from "react-bootstrap";
 import BsCard from "../components/BsCard";
@@ -8,7 +8,7 @@ import Pagination from "../components/Pagination";
 
 const Catalog = ({ goods, userId }) => {
   const { searchResult } = useContext(Ctx);
-  const paginate = usePagination(goods, 9);
+  const paginate = usePagination(goods, 12);
 
   useEffect(() => {
     paginate.step(1);

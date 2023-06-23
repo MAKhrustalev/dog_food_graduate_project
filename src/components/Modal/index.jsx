@@ -5,7 +5,6 @@ import "./style.css";
 import { userDesc } from "../../App";
 import { userDescId } from "../../App";
 import { userToken } from "../../App";
-import userBasket from "../../App";
 
 const Modal = ({ isActive, setIsActive, setUser }) => {
   const { api } = useContext(Ctx);

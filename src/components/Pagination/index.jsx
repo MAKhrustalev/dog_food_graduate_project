@@ -17,7 +17,6 @@ const Pagination = ({ hk }) => {
 
   return (
     <>
-      <BsPag>{items}</BsPag>
       <BsPag>
         {hk.page !== 1 && (
           <>
