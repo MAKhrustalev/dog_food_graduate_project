@@ -21,6 +21,13 @@ const Slider = ({ desktop = 4, mobile = 1 }) => {
         setCnt(desktop);
       }
     });
+    window.removeEventListener("resize", function () {
+      if (window.innerWidth <= 768) {
+        setCnt(mobile);
+      } else {
+        setCnt(desktop);
+      }
+    });
   }, []);
 
   useEffect(() => {

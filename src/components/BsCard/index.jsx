@@ -34,6 +34,9 @@ const BsCard = ({ discount, likes, name, pictures, price, tags, _id }) => {
         price,
         discount,
         cnt: 1,
+        pictures: pictures,
+        name: name,
+        tags: tags,
       },
     ]);
   };

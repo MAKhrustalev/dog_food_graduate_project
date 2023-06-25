@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import Ctx from "../ctx";
@@ -10,6 +10,7 @@ const UpdProduct = () => {
   const { api, setBaseData } = useContext(Ctx);
   const [name, setName] = useState("");
   const [link, setLink] = useState("");
+
   const [price, setPrice] = useState("");
   const [cnt, setCnt] = useState("");
   const [description, setDescription] = useState("");
@@ -36,9 +37,11 @@ const UpdProduct = () => {
     const val = e.target.innerText;
     setTags((prev) => prev.filter((tg) => tg !== val));
   };
-  const formHandler = (e) => {
+
+  const updHandler = (e) => {
     e.preventDefault();
     const body = {
+      id: id,
       name: name,
       price: price,
       pictures: link,
@@ -47,15 +50,19 @@ const UpdProduct = () => {
       cnt: cnt,
       wight: wight,
       description: description,
-      pictures: link,
+
       tags: tagWord && !tags.includes(tagWord) ? [...tags, tagWord] : tags,
     };
 
     api.updSingleProduct(id).then((data) => {
       if (!data.err && !data.error) {
+        console.log(data);
+        console.log(body);
+
         localStorage.setItem("price", body.price);
-        setBaseData((prev) => [...prev, body]);
-        console.log(price);
+
+        setBaseData((data) => [...data, body]);
+        console.log(data);
         navigate(`/product/${data._id}`);
       }
     });
@@ -67,7 +74,7 @@ const UpdProduct = () => {
         <Col xs={12}>
           <h1>Изменить товар</h1>
         </Col>
-        <Form onSubmit={formHandler}>
+        <Form onSubmit={updHandler}>
           <Row>
             <Col xs={12} md={6}>
               <Form.Group className="mb-3">

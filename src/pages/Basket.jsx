@@ -56,23 +56,27 @@ const Basket = ({}) => {
     <Container style={{ gridTemplateColumns: "1fr" }}>
       {basket.length > 0 ? (
         <>
-          <h1>Корзина</h1>
+          <h1 className="text-warning">Корзина</h1>
           <Table>
+            <thead>
+              <tr>
+                <td></td>
+                <td className="text-warning">Товар</td>
+                <td className="text-warning">Количество</td>
+                <td className="text-warning"></td>
+                <td className="text-warning">Цена</td>
+                <td className="text-warning">Стоимость со скидкой</td>
+              </tr>
+            </thead>
             <tbody>
               {basket.map((el) => (
                 <tr key={el.id}>
-                  {filteredData
-                    .filter((f) => f.id === el.id)
-                    .map((d) => (
-                      <Fragment key={d._id}>
-                        <td className="align-middle">
-                          <img src={d.pictures} alt={d.name} height="38px" />
-                        </td>
-                        <td className="align-middle">
-                          <Link to={`/product/${el.id}`}>{d.name}</Link>
-                        </td>
-                      </Fragment>
-                    ))}
+                  <td className="align-middle">
+                    <img src={el.pictures} height="38px" />
+                  </td>
+                  <td className="align-middle">
+                    <Link to={`/product/${el.id}`}>{el.name}</Link>
+                  </td>
                   <td className="align-middle">
                     <ButtonGroup>
                       <Button
@@ -121,7 +125,10 @@ const Basket = ({}) => {
 
             <tfoot>
               <tr>
-                <td colSpan={5} className="text-end text-uppercase">
+                <td
+                  colSpan={5}
+                  className="text-end text-uppercase text-warning"
+                >
                   Общая сумма:
                 </td>
                 <td className="fs-5 fw-bold">
